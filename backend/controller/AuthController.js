@@ -167,7 +167,7 @@ export const login = async (req, res) => {
         .json({ message: "Password is not correct!", success: false });
     }
     // if password is correct
-    createJwtSaveInCookies(res, user.id);
+    createJwtSaveInCookies(res, user.id, user.role);
     res.status(202).json({
       message: "User logged in successfully!",
       user: { ...user._doc, password: undefined },

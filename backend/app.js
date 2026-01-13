@@ -7,6 +7,7 @@ import "dotenv/config";
 // DB connection import
 import "./DB/DBConn.js";
 import authRouter from "./routes/AuthRouter.js";
+import userActionRouter from "./routes/UserActionsRouter.js";
 
 // Env Variables
 const PORT = process.env.PORT;
@@ -31,8 +32,9 @@ app.use(
   })
 );
 
-// Auth Router
+// Routers
 app.use("/api/auth", authRouter);
+app.use("/api/user", userActionRouter);
 
 io.on("connection", (socket) => {
   console.log("User ID: ", socket.id);
