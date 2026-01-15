@@ -9,28 +9,18 @@ const objectId = (value, helpers) => {
   return value;
 };
 
-export const petPostValidation = () => {
+export const petPostValidation = (req, res, next) => {
   const schema = joi.object({
     userId: joi.string().required().custom(objectId),
-
     animalType: joi.string().trim().required(),
-
     animalBreed: joi.string().trim().required(),
-
     age: joi.number().min(0).optional(),
-
     gender: joi.string().trim().required(),
-
     healthCondition: joi.string().trim().required(),
-
     vaccinationStatus: joi.string().trim().required(),
-
     sterilizationStatus: joi.string().trim().required(),
-
     location: joi.string().trim().required(),
-
     description: joi.string().trim().required(),
-
     images: joi
       .array()
       .items(
@@ -40,11 +30,8 @@ export const petPostValidation = () => {
         })
       )
       .optional(),
-
     adoptionStatus: joi.string().trim().optional(),
-
     requests: joi.array().items(joi.string().custom(objectId)).optional(),
-
     dateOfListing: joi.date().optional(),
   });
 
