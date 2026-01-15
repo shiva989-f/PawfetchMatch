@@ -1,8 +1,14 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
-import { browsePets, createPost } from "../controller/UserActionsController.js";
+import {
+  browsePets,
+  createPost,
+  requestAdoption,
+  updatePost,
+} from "../controller/UserActionsController.js";
 import { petPostValidation } from "../validation/PetPostValidation.js";
 import multer from "multer";
+import { verifiedUser } from "../middleware/VerifiedUser.js";
 
 const userActionRouter = Router();
 
@@ -14,11 +20,25 @@ const uploader = multer({
 userActionRouter.post(
   "/create-post",
   verifyToken,
+  verifiedUser,
   uploader.array("files", 10),
   petPostValidation,
   createPost
 );
-
-userActionRouter.get("/browse-pets", verifyToken, browsePets);
+userActionRouter.get(
+  "/update-post/:postId",
+  verifyToken,
+  verifiedUser,
+  uploader.array("files", 10),
+  petPostValidation,
+  updatePost
+);
+userActionRouter.get("/browse-pets", verifyToken, verifiedUser, browsePets);
+userActionRouter.post(
+  "/request-adoption",
+  verifyToken,
+  verifiedUser,
+  requestAdoption
+);
 
 export default userActionRouter;
