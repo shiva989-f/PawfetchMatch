@@ -49,7 +49,7 @@ const petPostSchema = new mongoose.Schema({
   adoptionStatus: {
     type: String,
   },
-  requests: [{ type: mongoose.Schema.Types.ObjectId }],
+  requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // ref: "User" is a model name where we have to search for id
   dateOfListing: {
     type: Date,
     default: Date.now,

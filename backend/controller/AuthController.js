@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
     if (existingUser) {
       if (existingUser.isVerified) {
         return res.status(409).json({
-          message: "User already exist, Please login!",
+          message: "User already exist with this email, Please login!",
           success: true,
         });
       } else {

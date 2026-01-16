@@ -3,7 +3,9 @@ import { verifyToken } from "../middleware/verifyToken.js";
 import {
   browsePets,
   createPost,
+  deletePost,
   requestAdoption,
+  showOwnPost,
   updatePost,
 } from "../controller/UserActionsController.js";
 import { petPostValidation } from "../validation/PetPostValidation.js";
@@ -25,7 +27,7 @@ userActionRouter.post(
   petPostValidation,
   createPost
 );
-userActionRouter.get(
+userActionRouter.post(
   "/update-post/:postId",
   verifyToken,
   verifiedUser,
@@ -33,9 +35,17 @@ userActionRouter.get(
   petPostValidation,
   updatePost
 );
+userActionRouter.get(
+  "/delete-post/:postId",
+  verifyToken,
+  verifiedUser,
+  deletePost
+);
+userActionRouter.get("/show-own-post/", verifyToken, verifiedUser, showOwnPost);
+
 userActionRouter.get("/browse-pets", verifyToken, verifiedUser, browsePets);
-userActionRouter.post(
-  "/request-adoption",
+userActionRouter.get(
+  "/request-adoption/:postId",
   verifyToken,
   verifiedUser,
   requestAdoption
