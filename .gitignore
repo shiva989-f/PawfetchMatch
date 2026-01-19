@@ -50,3 +50,11 @@ Thumbs.db
 # Misc
 # ===============================
 coverage/
+
+# ===============================
+# Image
+# ===============================
+design_idea.png
+card_design.png
+title_design.png
+css_tailwind.png

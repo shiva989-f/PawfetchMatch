@@ -2,6 +2,8 @@ import multer from "multer";
 import { deleteImage, uploadFile } from "../cloudinary/cloudinary.config.js";
 import { PetPostModel } from "../model/PetPostModel.js";
 import fs from "fs";
+import { Report } from "../model/ReportModel.js";
+import { User } from "../model/UserModel.js";
 
 // Create post
 export const createPost = async (req, res) => {
@@ -190,6 +192,56 @@ export const requestAdoption = async (req, res) => {
     await post.updateOne({ $addToSet: { requests: userId } });
 
     res.status(200).json({ message: "Requested...", success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!", success: false });
+  }
+};
+
+// Report Post API
+export const reportPost = async (req, res) => {
+  try {
+    const { targetId, reason, description } = req.body;
+    const userId = req.userData._id.toString();
+    const target = await PetPostModel.findById(targetId);
+    if (!target)
+      return res
+        .status(404)
+        .json({ message: "Post is unavailable.", success: false });
+
+    await Report.create({
+      targetType: "PetPost",
+      targetId,
+      reporterId: userId,
+      reason,
+      description,
+      status: "pending",
+    });
+    res.status(200).json({ message: "Post reported success!", success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!", success: false });
+  }
+};
+
+// Report User API
+export const reportUser = async (req, res) => {
+  try {
+    const { targetId, reason, description } = req.body;
+    const userId = req.userData._id.toString();
+    const target = await User.findById(targetId);
+    if (!target)
+      return res
+        .status(404)
+        .json({ message: "User is not available.", success: false });
+
+    await Report.create({
+      targetType: "User",
+      targetId,
+      reporterId: userId,
+      reason,
+      description,
+      status: "pending",
+    });
+    res.status(200).json({ message: "User reported success!", success: true });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!", success: false });
   }

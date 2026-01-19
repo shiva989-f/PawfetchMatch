@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  adminSignup,
   checkAuth,
   forgotPassword,
   login,
@@ -22,6 +23,12 @@ const uploader = multer({
 
 const authRouter = Router();
 
+authRouter.post(
+  "/admin-signup",
+  uploader.single("file"),
+  signupValidation,
+  adminSignup
+);
 authRouter.post("/signup", uploader.single("file"), signupValidation, signup);
 authRouter.post("/verify-email", verifyEmail);
 authRouter.post("/login", loginValidation, login);

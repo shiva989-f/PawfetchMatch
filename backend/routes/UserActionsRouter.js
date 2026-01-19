@@ -4,6 +4,8 @@ import {
   browsePets,
   createPost,
   deletePost,
+  reportPost,
+  reportUser,
   requestAdoption,
   showOwnPost,
   updatePost,
@@ -11,6 +13,7 @@ import {
 import { petPostValidation } from "../validation/PetPostValidation.js";
 import multer from "multer";
 import { verifiedUser } from "../middleware/VerifiedUser.js";
+import { reportValidation } from "../validation/ReportValidation.js";
 
 const userActionRouter = Router();
 
@@ -49,6 +52,22 @@ userActionRouter.get(
   verifyToken,
   verifiedUser,
   requestAdoption
+);
+
+userActionRouter.post(
+  "/report-post/",
+  verifyToken,
+  verifiedUser,
+  reportValidation,
+  reportPost
+);
+
+userActionRouter.post(
+  "/report-user/",
+  verifyToken,
+  verifiedUser,
+  reportValidation,
+  reportUser
 );
 
 export default userActionRouter;
