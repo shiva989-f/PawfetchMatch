@@ -8,6 +8,7 @@ import "dotenv/config";
 import "./DB/DBConn.js";
 import authRouter from "./routes/AuthRouter.js";
 import userActionRouter from "./routes/UserActionsRouter.js";
+import adminRouter from "./routes/AdminRouter.js";
 
 // Env Variables
 const PORT = process.env.PORT;
@@ -17,7 +18,6 @@ const server = new createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST"],
     credentials: true,
   },
 });
@@ -35,6 +35,7 @@ app.use(
 // Routers
 app.use("/api/auth", authRouter);
 app.use("/api/user", userActionRouter);
+app.use("/api/admin", adminRouter);
 
 io.on("connection", (socket) => {
   console.log("User ID: ", socket.id);

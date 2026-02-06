@@ -2,7 +2,7 @@ import multer from "multer";
 import { deleteImage, uploadFile } from "../cloudinary/cloudinary.config.js";
 import { PetPostModel } from "../model/PetPostModel.js";
 import fs from "fs";
-import { Report } from "../model/ReportModel.js";
+import { ReportModel } from "../model/ReportModel.js";
 import { User } from "../model/UserModel.js";
 
 // Create post
@@ -17,7 +17,7 @@ export const createPost = async (req, res) => {
           picId: upload.public_id,
           picURL: upload.secure_url,
         });
-        await fs.promises.unlink(file.path);
+        fs.unlinkSync(file.path);
       }
     }
 
@@ -208,7 +208,7 @@ export const reportPost = async (req, res) => {
         .status(404)
         .json({ message: "Post is unavailable.", success: false });
 
-    await Report.create({
+    await ReportModel.create({
       targetType: "PetPost",
       targetId,
       reporterId: userId,
@@ -233,7 +233,7 @@ export const reportUser = async (req, res) => {
         .status(404)
         .json({ message: "User is not available.", success: false });
 
-    await Report.create({
+    await ReportModel.create({
       targetType: "User",
       targetId,
       reporterId: userId,
@@ -244,5 +244,50 @@ export const reportUser = async (req, res) => {
     res.status(200).json({ message: "User reported success!", success: true });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!", success: false });
+  }
+};
+
+// Text Search Posts API
+export const searchPost = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const q = req.query.q;
+
+    if (!q) {
+      return res.status(400).json({
+        message: "Search query is required",
+        success: false,
+      });
+    }
+
+    const searchQuery = {
+      $text: { $search: q },
+    };
+
+    const totalPosts = await PetPostModel.countDocuments(searchQuery);
+
+    const posts = await PetPostModel.find(searchQuery)
+      .skip(skip)
+      .limit(limit)
+      .sort()
+      .select()
+      .lean();
+
+    res.status(200).json({
+      message: "Posts fetched successfully",
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      posts,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+      success: false,
+      error,
+    });
   }
 };

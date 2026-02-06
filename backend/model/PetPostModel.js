@@ -59,4 +59,12 @@ const petPostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+petPostSchema.index({
+  description: "text",
+  location: "text",
+  animalType: "text",
+  animalBreed: "text",
+  gender: "text",
+});
+
 export const PetPostModel = mongoose.model("PetPost", petPostSchema);

@@ -28,7 +28,7 @@ const ReportSchema = new mongoose.Schema(
       enum: ["pending", "in_review", "resolved", "rejecting"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const Report = mongoose.model("Reports", ReportSchema);
+export const ReportModel = mongoose.model("Reports", ReportSchema);

@@ -77,8 +77,6 @@ export const adminSignup = async (req, res) => {
       verificationTokenExpiresAt: Date.now() + 1 * 60 * 60 * 1000,
     });
 
-    await newUser.save();
-
     // Send verification mail
     sendVerificationMail(req.body.email, OTP);
     res

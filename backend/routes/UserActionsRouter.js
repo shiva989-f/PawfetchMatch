@@ -7,6 +7,7 @@ import {
   reportPost,
   reportUser,
   requestAdoption,
+  searchPost,
   showOwnPost,
   updatePost,
 } from "../controller/UserActionsController.js";
@@ -69,5 +70,7 @@ userActionRouter.post(
   reportValidation,
   reportUser
 );
+
+userActionRouter.get("/search-post", verifyToken, verifiedUser, searchPost);
 
 export default userActionRouter;
