@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "active",
+      enum: ["active", "suspended", "deleted"],
     },
     isVerified: {
       type: Boolean,
@@ -41,7 +42,7 @@ const userSchema = new mongoose.Schema(
     verificationToken: String,
     verificationTokenExpiresAt: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const User = mongoose.model("User", userSchema);
