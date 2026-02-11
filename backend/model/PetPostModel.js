@@ -50,13 +50,19 @@ const petPostSchema = new mongoose.Schema(
     adoptionStatus: {
       type: String,
     },
+    postStatus: {
+      type: String,
+      required: true,
+      default: "visible",
+      enum: ["visible", "deleted"],
+    },
     requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // ref: "User" is a model name where we have to search for id
     dateOfListing: {
       type: Date,
       default: Date.now,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 petPostSchema.index({

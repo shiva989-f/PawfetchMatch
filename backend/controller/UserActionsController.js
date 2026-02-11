@@ -8,6 +8,12 @@ import { User } from "../model/UserModel.js";
 // Create post
 export const createPost = async (req, res) => {
   try {
+    const user = req.userData;
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
     // Upload images to cloudinary
     const uploadedImages = [];
     if (req.files) {
@@ -41,8 +47,15 @@ export const createPost = async (req, res) => {
 // Update post
 export const updatePost = async (req, res) => {
   try {
+    const user = req.userData;
     const userId = req.userData._id.toString();
     const postId = req.params.postId;
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
+
     if (!postId)
       return res.status(400).json({ message: "Bad request", success: false });
 
@@ -96,8 +109,15 @@ export const updatePost = async (req, res) => {
 // Delete post
 export const deletePost = async (req, res) => {
   try {
+    const user = req.userData;
     const userId = req.userData._id.toString();
     const postId = req.params.postId;
+
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
 
     if (!postId)
       return res.status(400).json({ message: "Bad request", success: false });
@@ -148,8 +168,10 @@ export const browsePets = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const totalPosts = await PetPostModel.countDocuments();
-    const posts = await PetPostModel.find()
+    const totalPosts = await PetPostModel.countDocuments({
+      postStatus: { $ne: "deleted" },
+    });
+    const posts = await PetPostModel.find({ postStatus: { $ne: "deleted" } })
       .skip(skip) // how much records is to skip
       .limit(limit) // Maximum Number of records
       .sort({ createdAt: -1 }) // Without sort mongodDB will return data in unpredictable order. 1 is ascending order (old to new). -1 is descending order new to old
@@ -170,8 +192,14 @@ export const browsePets = async (req, res) => {
 // Request for adoption
 export const requestAdoption = async (req, res) => {
   try {
+    const user = req.userData;
     const postId = req.params.postId;
     const userId = req.userData._id.toString();
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
     if (!postId)
       return res.status(400).json({ message: "Bad request", success: false });
 
@@ -200,8 +228,14 @@ export const requestAdoption = async (req, res) => {
 // Report Post API
 export const reportPost = async (req, res) => {
   try {
+    const user = req.userData;
     const { targetId, reason, description } = req.body;
     const userId = req.userData._id.toString();
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
     const target = await PetPostModel.findById(targetId);
     if (!target)
       return res
@@ -225,8 +259,15 @@ export const reportPost = async (req, res) => {
 // Report User API
 export const reportUser = async (req, res) => {
   try {
+    const user = req.userData;
+
     const { targetId, reason, description } = req.body;
     const userId = req.userData._id.toString();
+    if (user.accountStatus === "suspended") {
+      return res
+        .status(403)
+        .json({ message: "Account is suspended!", success: false });
+    }
     const target = await User.findById(targetId);
     if (!target)
       return res
@@ -289,5 +330,22 @@ export const searchPost = async (req, res) => {
       success: false,
       error,
     });
+  }
+};
+
+export const showReports = async (req, res) => {
+  try {
+    const userId = req.userData._id.toString();
+    const reports = await ReportModel.find({ reporterId: userId })
+      .populate("targetId", "description username email") // populate targetId with specific fields from PetPost or User model, ref given in ReportModel
+      .sort({ createdAt: -1 })
+      .lean();
+    res.status(200).json({
+      message: "Reports fetched successfully",
+      reports,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", success: false });
   }
 };

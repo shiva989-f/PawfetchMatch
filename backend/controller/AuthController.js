@@ -39,6 +39,13 @@ const signupData = async (req, res) => {
     }
   }
 
+  if (existingUser && existingUser.accountStatus === "deleted") {
+    return res.status(403).json({
+      message: "Account is deleted, You can't signup with this email!",
+      success: false,
+    });
+  }
+
   // If user not exist then upload user image in cloudinary
   // If file not exist
   if (!req.file) {
@@ -190,6 +197,12 @@ export const login = async (req, res) => {
         success: false,
       });
     }
+    if (user.accountStatus === "deleted") {
+      return res.status(403).json({
+        message: "Account is deleted, You can't login!",
+        success: false,
+      });
+    }
     // Else match password
     const matchedPassword = await bcryptjs.compare(password, user.password);
     if (!matchedPassword) {
@@ -249,7 +262,7 @@ export const forgotPassword = async (req, res) => {
     await user.save();
     sendResetPasswordMail(
       email,
-      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+      `${process.env.CLIENT_URL}/reset-password/${resetToken}`,
     );
     res.status(200).json({
       message: "We've send you reset link on your email!",

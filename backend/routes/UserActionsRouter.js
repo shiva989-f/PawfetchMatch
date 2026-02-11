@@ -9,6 +9,7 @@ import {
   requestAdoption,
   searchPost,
   showOwnPost,
+  showReports,
   updatePost,
 } from "../controller/UserActionsController.js";
 import { petPostValidation } from "../validation/PetPostValidation.js";
@@ -29,7 +30,7 @@ userActionRouter.post(
   verifiedUser,
   uploader.array("files", 10),
   petPostValidation,
-  createPost
+  createPost,
 );
 userActionRouter.post(
   "/update-post/:postId",
@@ -37,13 +38,13 @@ userActionRouter.post(
   verifiedUser,
   uploader.array("files", 10),
   petPostValidation,
-  updatePost
+  updatePost,
 );
 userActionRouter.get(
   "/delete-post/:postId",
   verifyToken,
   verifiedUser,
-  deletePost
+  deletePost,
 );
 userActionRouter.get("/show-own-post/", verifyToken, verifiedUser, showOwnPost);
 
@@ -52,7 +53,7 @@ userActionRouter.get(
   "/request-adoption/:postId",
   verifyToken,
   verifiedUser,
-  requestAdoption
+  requestAdoption,
 );
 
 userActionRouter.post(
@@ -60,7 +61,7 @@ userActionRouter.post(
   verifyToken,
   verifiedUser,
   reportValidation,
-  reportPost
+  reportPost,
 );
 
 userActionRouter.post(
@@ -68,9 +69,10 @@ userActionRouter.post(
   verifyToken,
   verifiedUser,
   reportValidation,
-  reportUser
+  reportUser,
 );
 
 userActionRouter.get("/search-post", verifyToken, verifiedUser, searchPost);
+userActionRouter.get("/show-reports", verifyToken, verifiedUser, showReports);
 
 export default userActionRouter;
