@@ -1,10 +1,5 @@
-import { Poppins } from "next/font/google";
+import { poppins } from "./font";
 import "./globals.css";
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata = {
   title: "Pet Adoption App",
