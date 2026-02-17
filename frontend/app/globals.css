@@ -21,6 +21,10 @@
   main {
     @apply max-w-7xl mx-auto px-8 lg:px-6 min-h-screen relative;
   }
+
+  section {
+    @apply w-full py-20;
+  }
 }
 
 @layer components {
@@ -71,5 +75,16 @@
 
   .stats {
     @apply text-center text-white md:border-r-2 border-white py-4 px-8 sm:px-12;
+  }
+
+  .card-container {
+    @apply min-h-[60vh] flex flex-col items-center justify-center gap-8 my-12;
+  }
+  .details {
+    @apply order-2 mt-6 md:mt-0 sm:ml-6 flex-1 h-full rounded-2xl text-black p-2;
+  }
+
+  .header-text {
+    @apply flex flex-col md:flex-row gap-4 justify-center items-center;
   }
 }

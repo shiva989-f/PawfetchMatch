@@ -14,20 +14,20 @@ const Hero = () => {
             >
               Find Your Perfect
             </h1>
-            <h2
+            <h1
               className={`text-center md:text-start text-5xl lg:text-7xl font-bold text-secondary ${alkatra.className}`}
             >
               Companion
-            </h2>
+            </h1>
           </div>
           <div>
             <p
-              className={`text-center md:text-start ${alkatra.className} text-xl md:text-3xl`}
+              className={`text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               Adopt dogs, cats & rescued animal looking
             </p>
             <p
-              className={`text-center md:text-start ${alkatra.className} text-xl md:text-3xl`}
+              className={`text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               for a loving home.
             </p>
