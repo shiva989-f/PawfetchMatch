@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-background bg-[url('/bg_paw.png')] bg-cover bg-no-repeat bg-center min-h-screen;
+    @apply bg-background bg-[url('/bg_paw.png')] bg-cover bg-repeat-y bg-center min-h-screen;
   }
 
   body::-webkit-scrollbar {
@@ -23,7 +23,7 @@
   }
 
   section {
-    @apply w-full py-20;
+    @apply w-full my-8 relative;
   }
 }
 
@@ -34,7 +34,7 @@
   }
 
   #container {
-    @apply flex flex-col md:flex-row items-center gap-8 py-16 bottom-0;
+    @apply flex flex-col md:flex-row items-center gap-8 pb-16 bottom-0;
   }
 
   .left {
