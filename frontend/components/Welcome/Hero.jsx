@@ -65,6 +65,7 @@ const Hero = () => {
       split2.revert();
     };
   }, {});
+
   useGSAP(() => {
     const tl = gsap.timeline();
     tl.from(btnText.current, {
@@ -97,11 +98,13 @@ const Hero = () => {
           </div>
           <div>
             <p
+              ref={paraText1}
               className={`text-gray-600 text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               Adopt dogs, cats & rescued animal looking
             </p>
             <p
+              ref={paraText2}
               className={`text-gray-600 text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               for a loving home.
