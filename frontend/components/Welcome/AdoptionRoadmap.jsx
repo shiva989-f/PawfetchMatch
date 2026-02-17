@@ -84,10 +84,7 @@ const AdoptionRoadmap = () => {
 
       {/* Roadmap Grid */}
       <div className="relative w-full mx-auto mt-16">
-        <div
-          className="absolute inset-0 w-full h-full 
-  bg-[url('/grid.png')] bg-repeat opacity-30"
-        ></div>
+        <div className="absolute inset-0 w-full h-full bg-[url('/grid.png')] bg-repeat opacity-30"></div>
 
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
@@ -100,10 +97,12 @@ const AdoptionRoadmap = () => {
               {/* Card */}
               <div
                 style={{ backgroundColor: step.bgColor }}
-                className={`rounded-2xl p-6 pb-8 relative overflow-visible shadow-lg hover:shadow-xl transition-shadow duration-300`}
+                className={`rounded-2xl p-6 pb-8 relative overflow-visible shadow-lg `}
               >
                 {/* Inner Card */}
-                <div className={`bg-white rounded-2xl p-6 mt-16 relative`}>
+                <div
+                  className={`bg-white rounded-2xl p-6 mt-16 relative shadow-lg hover:shadow-xl transition-shadow duration-300`}
+                >
                   {/* Icon */}
                   <div
                     style={{ backgroundColor: step.iconBg }}

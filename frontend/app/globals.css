@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-background bg-[url('/bg_paw.png')] bg-cover bg-repeat-y bg-center min-h-screen;
+    @apply bg-background bg-[url('/bg_paw.svg')] bg-cover bg-repeat-y bg-center min-h-screen;
   }
 
   body::-webkit-scrollbar {

@@ -97,14 +97,12 @@ const Hero = () => {
           </div>
           <div>
             <p
-              ref={paraText1}
-              className={`text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
+              className={`text-gray-600 text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               Adopt dogs, cats & rescued animal looking
             </p>
             <p
-              ref={paraText2}
-              className={`text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
+              className={`text-gray-600 text-center md:text-start ${alkatra.className} text-xl md:text-2xl`}
             >
               for a loving home.
             </p>
