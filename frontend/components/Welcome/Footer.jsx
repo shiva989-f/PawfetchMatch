@@ -35,11 +35,11 @@ const Footer = () => {
         </p>
       </div>
 
-      {/* <div className="text-center my-4">
+      <div className="text-center my-4">
         <p className="text-base text-gray-400">
           Made with 💖 by Shiva and Pankaj
         </p>
-      </div> */}
+      </div>
     </section>
   );
 };
