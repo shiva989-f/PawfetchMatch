@@ -1,4 +1,9 @@
-import { Alkatra, Corinthia, Poppins } from "next/font/google";
+import {
+  Alkatra,
+  Baloo_Bhaijaan_2,
+  Corinthia,
+  Poppins,
+} from "next/font/google";
 
 export const poppins = Poppins({
   subsets: ["latin"],
@@ -13,6 +18,12 @@ export const alkatra = Alkatra({
 });
 
 export const corinthia = Corinthia({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+
+export const baloo_bhaijaan_2 = Baloo_Bhaijaan_2({
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",

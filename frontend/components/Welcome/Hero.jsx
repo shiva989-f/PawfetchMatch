@@ -112,9 +112,13 @@ const Hero = () => {
           </div>
           <button
             ref={btnText}
-            className="primary-btn mt-8 block mx-auto md:mx-0"
+            className="relative overflow-hidden primary-btn mt-8 block mx-auto md:mx-0 group"
           >
-            Adopt Companion
+            {/* Animated background layer */}
+            <div className="absolute left-0 top-0 h-full w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full"></div>
+
+            {/* Button text */}
+            <span className="relative z-10">Adopt Companion</span>
           </button>
         </div>
         {/* Right side Container with Hero Image */}
