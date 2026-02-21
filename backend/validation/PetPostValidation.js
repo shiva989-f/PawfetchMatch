@@ -20,14 +20,14 @@ export const petPostValidation = (req, res, next) => {
     vaccinationStatus: joi.string().trim().required(),
     sterilizationStatus: joi.string().trim().required(),
     location: joi.string().trim().required(),
-    description: joi.string().trim().required(),
+    description: joi.string().trim().required().max(500),
     images: joi
       .array()
       .items(
         joi.object({
           picId: joi.string().required(),
           picURL: joi.string().uri().required(),
-        })
+        }),
       )
       .optional(),
     adoptionStatus: joi.string().trim().optional(),

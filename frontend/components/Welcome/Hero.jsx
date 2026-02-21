@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
+import { useRouter } from "next/navigation";
 
 // Plugins
 gsap.registerPlugin(SplitText);
@@ -13,6 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(useGSAP);
 
 const Hero = () => {
+  const router = useRouter();
   const heroImage = useRef(null);
   const heroText1 = useRef(null);
   const heroText2 = useRef(null);
@@ -23,7 +25,6 @@ const Hero = () => {
 
   useGSAP(() => {
     const tl = gsap.timeline();
-
     // 🔹 Heading Animation
     tl.from([heroText1.current, heroText2.current], {
       y: 100,
@@ -113,6 +114,7 @@ const Hero = () => {
           <button
             ref={btnText}
             className="relative overflow-hidden primary-btn mt-8 block mx-auto md:mx-0 group"
+            onClick={() => router.push("/signup")}
           >
             {/* Animated background layer */}
             <div className="absolute left-0 top-0 h-full w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full"></div>
@@ -136,7 +138,7 @@ const Hero = () => {
         </div>
       </div>
       <div className="searchStatsBar">
-        <div className="searchBar">
+        <div className="searchBar" onClick={() => router.push("/login")}>
           <input type="Search" placeholder="Search..." />
           <MdOutlineSearch className="text-2xl text-secondary" />
         </div>

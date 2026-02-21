@@ -7,6 +7,7 @@ export const signupValidation = (req, res, next) => {
     address: joi
       .object({
         city: joi.string().trim().required(),
+        state: joi.string().trim().required(),
         country: joi.string().trim().required(),
       })
       .required(),

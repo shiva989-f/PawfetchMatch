@@ -7,12 +7,14 @@ const Footer = () => {
     <section>
       <div className="footer-upper">
         <div className="footer-header-text">
-          <h2 className="text-4xl font-bold">Hearts & Paws</h2>
-          <p className="opacity-70 text-xl">Adopt Love. Save Lives.</p>
+          <h2 className="text-xl sm:text-4xl font-bold">Hearts & Paws</h2>
+          <p className="opacity-70 text-xs sm:text-xl">
+            Adopt Love. Save Lives.
+          </p>
         </div>
         <div className="relative">
           <div
-            className={`${baloo_bhaijaan_2.className} font-black text-center text-white text-[250px] opacity-70 tracking-wide`}
+            className={`${baloo_bhaijaan_2.className} font-black text-center px-2 text-white text-6xl sm:text-9xl md:text-[250px] opacity-70 tracking-wide`}
           >
             adopt
           </div>
@@ -22,14 +24,16 @@ const Footer = () => {
             alt="Cat Face"
             width={500}
             height={500}
-            className="absolute bottom-0 left-1/2 -translate-x-1/2"
+            className="px-6 w-40 sm:w-xs md:w-xl absolute bottom-0 left-1/2 -translate-x-1/2"
           />
         </div>
       </div>
 
-      <div className="text-center py-8 bg-white rounded-bl-2xl rounded-br-2xl">
-        <p>Millions of loving pets are waiting for a forever home.</p>
-        <p>
+      <div className="text-center py-8 px-2 bg-white rounded-bl-2xl rounded-br-2xl">
+        <p className="text-xs sm:text-base">
+          Millions of loving pets are waiting for a forever home.
+        </p>
+        <p className="text-xs sm:text-base">
           By adopting, you give a pet a second chance and bring unconditional
           love and joy into your life.
         </p>

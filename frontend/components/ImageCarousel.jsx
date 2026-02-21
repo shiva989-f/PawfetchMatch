@@ -33,11 +33,11 @@ const ImageCarousel = ({ storyDetails }) => {
   return (
     <>
       <div
-        className={`flex flex-wrap justify-between items-center gap-2 relative rounded-2xl w-full min-h-[60vh] mx-auto pl-6`}
+        className={`flex flex-col md:flex-row justify-center md:justify-between items-center gap-2 relative rounded-2xl w-full min-h-[60vh] mx-auto pl-6`}
       >
         {/* Current Image */}
         <div
-          className={`relative w-96 order-1 aspect-square -rotate-5 overflow-hidden rounded-lg shadow-xl transition-all duration-500 ease-in hover:rotate-0`}
+          className={`relative w-60 sm:w-80 lg:w-96 order-1 aspect-square -rotate-5 overflow-hidden rounded-lg shadow-xl transition-all duration-500 ease-in hover:rotate-0`}
         >
           <Image
             src={storyDetails[index].imageUrl}
@@ -52,7 +52,7 @@ const ImageCarousel = ({ storyDetails }) => {
 
         <div className="details">
           <h2
-            className={`${alkatra.className} text-3xl text-primary font-bold`}
+            className={`${alkatra.className} text-3xl text-primary font-bold text-center lg:text-start`}
           >
             {storyDetails[index].title}
           </h2>

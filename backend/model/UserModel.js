@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     profilePicUrl: String,
     address: {
       city: String,
+      state: String,
       country: String,
     },
     password: {

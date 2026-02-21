@@ -78,7 +78,9 @@ const AdoptionRoadmap = () => {
           >
             Getting Started Is Easy<span className="text-secondary">.</span>
           </h1>
-          <p>One small decision can change a pet’s entire world</p>
+          <p className="text-center">
+            One small decision can change a pet’s entire world
+          </p>
         </div>
       </div>
 
