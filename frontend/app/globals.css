@@ -56,7 +56,7 @@
   }
 
   .primary-btn {
-    @apply inline-block px-4 py-1.5 text-xs border-2 rounded-full text-white bg-primary transition-all duration-300 cursor-pointer sm:px-6 sm:py-2 sm:text-base  hover:text-primary hover:bg-transparent hover:border-2 hover:border-primary;
+    @apply inline-block px-4 py-1.5 text-xs border-2 border-primary rounded-full text-white bg-primary transition-all duration-300 cursor-pointer sm:px-6 sm:py-2 sm:text-base  hover:text-primary hover:bg-transparent hover:border-2 hover:border-primary disabled:bg-primary/40 disabled:hover:bg-primary/40 disabled:hover:text-white disabled:hover:border-2;
   }
 
   .secondary-btn {

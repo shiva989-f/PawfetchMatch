@@ -6,9 +6,11 @@ import { LuCircleUser, LuEye, LuEyeClosed } from "react-icons/lu";
 import Link from "next/link";
 import { errorMessage } from "@/utils/HandleToast";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/Store/AuthStore";
 
 const Signup = () => {
   const router = useRouter();
+  const authStore = useAuthStore();
 
   const [signupData, setSignupData] = useState({
     username: "",
@@ -25,6 +27,12 @@ const Signup = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  // Handle check box
+  const handleCheckboxChange = (e) => {
+    setIsChecked((prev) => !prev);
+  };
 
   // Handle input change
   const handleChange = (e) => {
@@ -59,6 +67,7 @@ const Signup = () => {
     }
   };
 
+  // Handle form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,6 +79,8 @@ const Signup = () => {
       confirmPassword,
       profileImage,
     } = signupData;
+
+    console.log(signupData);
 
     if (
       !username ||
@@ -98,13 +109,16 @@ const Signup = () => {
     formData.append("password", password);
     formData.append("address", JSON.stringify(address));
 
-    // TODO: Send to backend
-    // await fetch("/api/signup", { method: "POST", body: formData });
+    // TODO: Call signup api
+    const res = await authStore.signup(formData);
+    console.log(res);
   };
 
+  // Toggle Password visibility
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
+
   return (
     <main>
       <section className="relative flex flex-col md:flex-row rounded-2xl shadow-2xl overflow-hidden">
@@ -250,7 +264,7 @@ const Signup = () => {
             <div className="flex flex-col gap-2">
               <label>Confirm Password</label>
               <input
-                type={isPasswordVisible ? "text" : "password"}
+                type={"password"}
                 name="confirmPassword"
                 value={signupData.confirmPassword}
                 onChange={handleChange}
@@ -262,10 +276,12 @@ const Signup = () => {
               <input
                 type="checkbox"
                 name="agree"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
                 id="agree-terms"
                 className="accent-primary"
               />
-              <span className="text-xs">
+              <label htmlFor="agree-terms" className="text-xs">
                 I agree to all the{" "}
                 <Link href={"/terms"} className="text-primary">
                   Terms
@@ -274,10 +290,14 @@ const Signup = () => {
                 <Link href={"/privacy-policy"} className="text-primary">
                   Privacy Policies
                 </Link>
-              </span>
+              </label>
             </div>
 
-            <button type="submit" className="primary-btn w-full py-2">
+            <button
+              disabled={!isChecked}
+              type="submit"
+              className="primary-btn w-full py-2"
+            >
               Create Account
             </button>
             <div className="text-xs text-center w-full">
