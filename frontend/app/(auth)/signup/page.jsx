@@ -1,12 +1,13 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { MdArrowBack } from "react-icons/md";
 import { LuCircleUser, LuEye, LuEyeClosed } from "react-icons/lu";
 import Link from "next/link";
 import { errorMessage } from "@/utils/HandleToast";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/Store/AuthStore";
+import { FaCircleNotch } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
 
 const Signup = () => {
   const router = useRouter();
@@ -80,8 +81,6 @@ const Signup = () => {
       profileImage,
     } = signupData;
 
-    console.log(signupData);
-
     if (
       !username ||
       !email ||
@@ -108,10 +107,10 @@ const Signup = () => {
     formData.append("email", email);
     formData.append("password", password);
     formData.append("address", JSON.stringify(address));
-
-    // TODO: Call signup api
     const res = await authStore.signup(formData);
-    console.log(res);
+    if (res.success) {
+      router.push("/verify-email");
+    }
   };
 
   // Toggle Password visibility
@@ -132,7 +131,7 @@ const Signup = () => {
               className="primary-btn flex items-center gap-2 py-1 sm:py-2 px-2 sm:px-4 text-xs"
               onClick={() => router.push("/")}
             >
-              <MdArrowBack />
+              <IoIosArrowBack />
               <span>Welcome page</span>
             </button>
           </div>
@@ -140,6 +139,7 @@ const Signup = () => {
           <Image
             src="/auth_page.jpeg"
             fill
+            loading="eager"
             alt="Signup page image"
             className="object-cover"
             sizes="50vw"
@@ -298,7 +298,11 @@ const Signup = () => {
               type="submit"
               className="primary-btn w-full py-2"
             >
-              Create Account
+              {authStore.isLoading ? (
+                <FaCircleNotch className="animate-spin text-lg" />
+              ) : (
+                "Create Account"
+              )}
             </button>
             <div className="text-xs text-center w-full">
               Already have an account?{" "}

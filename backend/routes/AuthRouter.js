@@ -24,10 +24,10 @@ const uploader = multer({
 const authRouter = Router();
 
 authRouter.post(
-  "/admin-signup",
+  "/admin/signup",
   uploader.single("file"),
   signupValidation,
-  adminSignup
+  adminSignup,
 );
 authRouter.post("/signup", uploader.single("file"), signupValidation, signup);
 authRouter.post("/verify-email", verifyEmail);

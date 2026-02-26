@@ -1,6 +1,16 @@
 import joi from "joi";
 
 export const signupValidation = (req, res, next) => {
+  if (req.body.address && typeof req.body.address === "string") {
+    try {
+      req.body.address = JSON.parse(req.body.address);
+    } catch (err) {
+      return res.status(400).json({
+        message: "Invalid address format",
+      });
+    }
+  }
+
   const schema = joi.object({
     username: joi.string().trim().min(2).required(),
     email: joi.string().trim().email().required(),

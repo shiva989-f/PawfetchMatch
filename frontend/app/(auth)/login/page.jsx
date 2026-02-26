@@ -1,13 +1,18 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
-import { LuCircleUser, LuEye, LuEyeClosed } from "react-icons/lu";
+import { LuEye, LuEyeClosed } from "react-icons/lu";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { errorMessage } from "@/utils/HandleToast";
+import { useAuthStore } from "@/Store/AuthStore";
+import { FaCircleNotch } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
 
 const Login = () => {
+  const authStore = useAuthStore();
+
   const router = useRouter();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -30,19 +35,20 @@ const Login = () => {
     const { email, password } = loginData;
 
     if (!email || !password) {
-      errorMessage("All fields required!");
+      errorMessage("Email and Password is required to login!");
       return;
     }
-
-    // TODO: Send to backend
-    // await fetch("/api/signup", { method: "POST", body: formData });
+    const res = await authStore.login(loginData);
+    if (res.success || authStore.isAuthenticated) {
+      router.push("/pets");
+    }
   };
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
   return (
-    <main>  
+    <main>
       <section className="relative flex flex-col md:flex-row rounded-2xl shadow-2xl overflow-hidden">
         {/* Left */}
         <div className="relative w-full md:w-1/2 min-h-screen">
@@ -54,7 +60,7 @@ const Login = () => {
               className="primary-btn flex items-center gap-2 py-1 sm:py-2 px-2 sm:px-4 text-xs"
               onClick={() => router.push("/")}
             >
-              <MdArrowBack />
+              <IoIosArrowBack />
               <span>Welcome page</span>
             </button>
           </div>
@@ -62,7 +68,8 @@ const Login = () => {
           <Image
             src="/auth_page.jpeg"
             fill
-            alt="Signup page image"
+            loading="eager"
+            alt="Login page image"
             className="object-cover"
             sizes="50vw"
           />
@@ -117,7 +124,11 @@ const Login = () => {
             </div>
 
             <button type="submit" className="primary-btn w-full py-2">
-              Login
+              {authStore.isLoading ? (
+                <FaCircleNotch className="animate-spin text-lg" />
+              ) : (
+                "Login"
+              )}
             </button>
             <div className="text-xs text-center w-full">
               Already have an account?{" "}

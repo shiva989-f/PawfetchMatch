@@ -11,89 +11,83 @@ import {
 import { uploadFile } from "../cloudinary/cloudinary.config.js";
 import fs from "fs";
 import { createJwtSaveInCookies } from "../utils/CreateJwtSaveCookie.js";
+import { log } from "console";
 
 // Signup functionality so we do not have to repeat in signup and adminSignup
-const signupData = async (req, res) => {
+const signupData = async (req) => {
   const { email, password } = req.body;
-  // find user, hash the password create verification token, save the data
-  const hashedPassword = await bcryptjs.hash(password, 10);
-  const OTP = createOtp();
-  const existingUser = await User.findOne({ email });
-  // Checking if user already exist
+  const existingUser = await User.findOne({ email }).select("-password");
+
+  // If user already exists
   if (existingUser) {
     if (existingUser.isVerified) {
-      return res.status(409).json({
-        message: "User already exist with this email, Please login!",
-        success: true,
-      });
-    } else {
-      // If user not exist send verification mail
-      existingUser.verificationToken = OTP;
-      existingUser.verificationTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // Valid for 1 hour
-      await existingUser.save();
-      sendVerificationMail(email, OTP);
-      res.status(200).json({
-        message: "Otp sent on email for verification!",
-        success: true,
-      });
+      return { user: existingUser, status: "ALREADY_VERIFIED" };
     }
+    const OTP = createOtp();
+    existingUser.verificationToken = OTP;
+    existingUser.verificationTokenExpiresAt = Date.now() + 60 * 60 * 1000;
+    await existingUser.save();
+    sendVerificationMail(email, OTP);
+    return { user: existingUser, status: "OTP_SENT" };
   }
 
-  if (existingUser && existingUser.accountStatus === "deleted") {
-    return res.status(403).json({
-      message: "Account is deleted, You can't signup with this email!",
-      success: false,
-    });
-  }
-
-  // If user not exist then upload user image in cloudinary
-  // If file not exist
+  // New user flow
   if (!req.file) {
-    return res.status(404).json({
-      message: "Profile picture is required!",
-      file: req.file,
-      success: false,
-    });
+    throw new Error("Profile picture is required!");
   }
-
-  // upload image in cloudinary if exist
+  const hashedPassword = await bcryptjs.hash(password, 10);
+  const OTP = createOtp();
   const upload = await uploadFile(req.file.path);
-  fs.unlinkSync(req.file.path); // Delete file after upload
-
+  fs.unlinkSync(req.file.path);
   if (!upload) {
-    return res
-      .status(500)
-      .json({ message: "Something went wrong!", success: false });
+    throw new Error("Image upload failed");
   }
-  return { hashedPassword, upload, OTP };
+  return {
+    status: "NEW_USER",
+    hashedPassword,
+    upload,
+    OTP,
+  };
 };
 
-// Admin signup Function http://localhost:3000/api/auth/admin-signup
+// Admin signup Function http://localhost:3000/api/auth/admin/signup
 export const adminSignup = async (req, res) => {
   try {
-    const { hashedPassword, upload, OTP } = await signupData(req, res);
-
-    // Create new user and save in DB.
-    const newUser = await User.create({
+    const result = await signupData(req);
+    if (result.status === "ALREADY_VERIFIED") {
+      return res.status(409).json({
+        success: false,
+        message: "User already exists. Please login!",
+        user: result.user,
+      });
+    }
+    if (result.status === "OTP_SENT") {
+      return res.status(200).json({
+        success: true,
+        message: "Verification code is sent on email!",
+        user: result.user,
+      });
+    }
+    const { hashedPassword, upload, OTP } = result;
+    const user = await User.create({
       ...req.body,
-      password: hashedPassword,
       role: "admin",
+      password: hashedPassword,
       profilePicId: upload.public_id,
       profilePicUrl: upload.secure_url,
       verificationToken: OTP,
-      verificationTokenExpiresAt: Date.now() + 1 * 60 * 60 * 1000,
+      verificationTokenExpiresAt: Date.now() + 60 * 60 * 1000,
     });
 
-    // Send verification mail
-    sendVerificationMail(req.body.email, OTP);
-    res
-      .status(201)
-      .json({ message: "Account created successfully!", success: true });
+    return res.status(201).json({
+      success: true,
+      message: "Verification code is sent on email!",
+      user: { ...user._doc, password: undefined },
+    });
   } catch (error) {
-    res.status(500).json({
-      message: "Something went wrong",
-      error: error.message, // Return readable message
+    return res.status(500).json({
       success: false,
+      message: error.message,
     });
   }
 };
@@ -101,29 +95,40 @@ export const adminSignup = async (req, res) => {
 // Signup Function http://localhost:3000/api/auth/signup
 export const signup = async (req, res) => {
   try {
-    const { hashedPassword, upload, OTP } = await signupData(req, res);
-    // Create new user and save in DB.
-    const newUser = await User.create({
+    const result = await signupData(req);
+
+    if (result.status === "ALREADY_VERIFIED") {
+      return res.status(409).json({
+        success: false,
+        message: "User already exists. Please login!",
+        user: result.user,
+      });
+    }
+    if (result.status === "OTP_SENT") {
+      return res.status(200).json({
+        success: true,
+        message: "Verification code is sent on email!",
+        user: result.user,
+      });
+    }
+    const { hashedPassword, upload, OTP } = result;
+    const user = await User.create({
       ...req.body,
       password: hashedPassword,
       profilePicId: upload.public_id,
       profilePicUrl: upload.secure_url,
       verificationToken: OTP,
-      verificationTokenExpiresAt: Date.now() + 1 * 60 * 60 * 1000,
+      verificationTokenExpiresAt: Date.now() + 60 * 60 * 1000,
     });
-
-    await newUser.save();
-
-    // Send verification mail
-    sendVerificationMail(req.body.email, OTP);
-    res
-      .status(201)
-      .json({ message: "Account created successfully!", success: true });
+    return res.status(201).json({
+      success: true,
+      message: "Verification code is sent on email!",
+      user: { ...user._doc, password: undefined },
+    });
   } catch (error) {
-    res.status(500).json({
-      message: "Something went wrong",
-      error: error.message, // Return readable message
+    return res.status(500).json({
       success: false,
+      message: error.message,
     });
   }
 };
@@ -236,6 +241,7 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+    console.log(email);
     if (!email) {
       return res.status(400).json({
         message: "Invalid request, please enter email!",
@@ -269,6 +275,7 @@ export const forgotPassword = async (req, res) => {
       success: true,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       message: "Something went wrong",
       error: error.message,
@@ -288,6 +295,13 @@ export const resetPassword = async (req, res) => {
       });
     }
 
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters long",
+        success: false,
+      });
+    }
+
     const user = await User.findOne({
       resetPasswordToken: resetToken,
       resetPasswordExpiresAt: { $gt: Date.now() },
@@ -296,7 +310,7 @@ export const resetPassword = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ message: "User not found!", success: false });
+        .json({ message: "User not found with this token!", success: false });
     }
     const hashedPassword = await bcryptjs.hash(password, 10);
     user.password = hashedPassword;
@@ -304,9 +318,12 @@ export const resetPassword = async (req, res) => {
     user.resetPasswordExpiresAt = undefined;
     await user.save();
     sendResetPasswordSuccessMail(user.email, user.username);
-    res
-      .status(200)
-      .json({ message: "Password reset successfully!", success: true });
+    createJwtSaveInCookies(res, user.id, user.role);
+    res.status(200).json({
+      message: "Password reset successfully!",
+      user: { ...user._doc, password: undefined },
+      success: true,
+    });
   } catch (error) {
     res.status(500).json({
       message: "Something went wrong",
