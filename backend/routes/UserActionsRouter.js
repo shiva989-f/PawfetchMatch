@@ -48,7 +48,7 @@ userActionRouter.get(
 );
 userActionRouter.get("/show-own-post/", verifyToken, verifiedUser, showOwnPost);
 
-userActionRouter.get("/browse-pets", verifyToken, verifiedUser, browsePets);
+userActionRouter.get("/pets", verifyToken, verifiedUser, browsePets);
 userActionRouter.get(
   "/request-adoption/:postId",
   verifyToken,
