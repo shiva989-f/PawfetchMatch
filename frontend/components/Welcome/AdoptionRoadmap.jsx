@@ -126,7 +126,7 @@ const AdoptionRoadmap = () => {
                   >
                     {step.number}
                   </h2>
-                  <h3 className="text-xl mb-3 underline decoration">
+                  <h3 className="text-xl font-semibold mb-3 underline decoration">
                     {step.title}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed">

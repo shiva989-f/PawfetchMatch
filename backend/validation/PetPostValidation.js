@@ -16,9 +16,41 @@ export const petPostValidation = (req, res, next) => {
     animalBreed: joi.string().trim().required(),
     age: joi.number().min(0).optional(),
     gender: joi.string().trim().required(),
-    healthCondition: joi.string().trim().required(),
-    vaccinationStatus: joi.string().trim().required(),
-    sterilizationStatus: joi.string().trim().required(),
+    healthCondition: joi
+      .string()
+      .trim()
+      .valid(
+        "Healthy",
+        "Minor Treatable issue",
+        "special needs",
+        "under treatment",
+        "recovering",
+        "unknown",
+      )
+      .required(),
+    vaccinationStatus: joi
+      .string()
+      .trim()
+      .valid(
+        "fully vaccinated",
+        "partially vaccinated",
+        "not vaccinated",
+        "not required",
+        "vaccination in progress",
+        "unknown",
+      )
+      .required(),
+    sterilizationStatus: joi
+      .string()
+      .trim()
+      .valid(
+        "sterilized",
+        "not sterilized",
+        "scheduled",
+        "not applicable",
+        "unknown",
+      )
+      .required(),
     location: joi.string().trim().required(),
     description: joi.string().trim().required().max(500),
     images: joi

@@ -7,20 +7,31 @@ import { useEffect, useState } from "react";
 import { BsGenderNeuter, BsSearch } from "react-icons/bs";
 import { LuMapPin } from "react-icons/lu";
 import { CgSandClock } from "react-icons/cg";
+import { useAuthStore } from "@/Store/AuthStore";
+import { useRouter } from "next/navigation";
 
 const Pets = () => {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+  const { searchPets } = useUserActions();
   const { getPetsData, pets, totalPages, isLoading } = useUserActions();
   const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
 
   // Filter buttons
   const filters = [
     { img: "/dog.png", title: "Dogs", bgColor: "#F6EFD1" },
     { img: "/cat.png", title: "Cats", bgColor: "#F0D8CB" },
     { img: "/parrot.png", title: "Birds", bgColor: "#C4E6F2" },
-    { img: "/fish.png", title: "Fish", bgColor: "#E4E4EC" },
+    { img: "/turtle.png", title: "Turtle", bgColor: "#E4E4EC" },
     { img: "/rabbit.png", title: "Rabbits", bgColor: "#B1FFDC" },
     { img: "/hamster.png", title: "Hamster", bgColor: "#FECDD0" },
   ];
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/login");
+  };
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -39,10 +50,7 @@ const Pets = () => {
           <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
             Adopt <span className="text-secondary">Pets</span> Today
           </h1>
-          <button
-            className="primary-btn"
-            onClick={() => router.push("/signup")}
-          >
+          <button className="primary-btn" onClick={handleLogout}>
             Logout
           </button>
         </div>
@@ -54,7 +62,23 @@ const Pets = () => {
             <BsSearch />
             <input
               type="text"
+              enterKeyHint="search"
               placeholder="Type a query"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                // If input becomes empty → show all data
+                if (e.target.value.trim() === "") {
+                  setPage(1);
+                  getPetsData({ page: 1, limit: 10 });
+                }
+              }}
+              onKeyDown={async (e) => {
+                if (e.key === "Enter") {
+                  if (!query.trim()) return;
+                  await searchPets({ query, page: 1, limit: 10 });
+                }
+              }}
               className="w-full border-none outline-none pl-4"
             />
           </div>
@@ -66,6 +90,9 @@ const Pets = () => {
               key={index}
               style={{ background: item.bgColor }}
               className="flex items-center justify-center gap-2 py-0.5 px-2 rounded-2xl"
+              onClick={async (e) =>
+                await searchPets({ query: item.title, page: 1, limit: 10 })
+              }
             >
               <Image width={50} height={50} src={item.img} alt={item.title} />
               <span className="text-sm md:text-base font-bold truncate">
@@ -110,7 +137,9 @@ const Pets = () => {
                     {/* <span className="text-gray-600">•</span> */}
                     <div className="flex justify-start items-center gap-2">
                       <CgSandClock className="text-primary" />
-                      <p className="text-sm text-gray-600">{item.age} months</p>
+                      <p className="text-sm text-gray-600">
+                        {item.age} year(s)
+                      </p>
                     </div>
                   </div>
 

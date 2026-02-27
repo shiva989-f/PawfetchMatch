@@ -20,7 +20,7 @@ import { reportValidation } from "../validation/ReportValidation.js";
 const userActionRouter = Router();
 
 const uploader = multer({
-  storage: multer.diskStorage({ destination: "/pet_images" }),
+  storage: multer.diskStorage({}),
   limits: 5 * 1024 * 1024,
 });
 
