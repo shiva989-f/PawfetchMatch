@@ -9,6 +9,7 @@ import { LuMapPin } from "react-icons/lu";
 import { CgSandClock } from "react-icons/cg";
 import { useAuthStore } from "@/Store/AuthStore";
 import { useRouter } from "next/navigation";
+import { MdFilterAltOff } from "react-icons/md";
 
 const Pets = () => {
   const { logout } = useAuthStore();
@@ -17,6 +18,7 @@ const Pets = () => {
   const { getPetsData, pets, totalPages, isLoading } = useUserActions();
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("");
 
   // Filter buttons
   const filters = [
@@ -41,6 +43,25 @@ const Pets = () => {
   useEffect(() => {
     getPetsData({ page, limit: 10 });
   }, [page]);
+
+  // Search Query and Filter
+  useEffect(() => {
+    if (query.trim()) {
+      searchPets({
+        query,
+        page,
+        limit: 10,
+      });
+    } else if (activeFilter) {
+      searchPets({
+        query: activeFilter,
+        page,
+        limit: 10,
+      });
+    } else {
+      getPetsData({ page, limit: 10 });
+    }
+  }, [page, query, activeFilter]);
 
   return (
     <main>
@@ -84,15 +105,23 @@ const Pets = () => {
           </div>
         </div>
 
-        <div className="hidden sm:grid w-full grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 lg:grid-cols-6 mt-6">
+        <div className="hidden sm:flex w-full overflow-x-auto gap-2 mt-6 scrollbar-hide py-2">
+          <div
+            className="bg-secondary flex items-center justify-center gap-2 y-0.5 px-4 rounded-2xl"
+            onClick={() => {
+              setActiveFilter("");
+              setQuery("");
+              setPage(1);
+            }}
+          >
+            <MdFilterAltOff />
+          </div>
           {filters.map((item, index) => (
             <div
               key={index}
               style={{ background: item.bgColor }}
-              className="flex items-center justify-center gap-2 py-0.5 px-2 rounded-2xl"
-              onClick={async (e) =>
-                await searchPets({ query: item.title, page: 1, limit: 10 })
-              }
+              className={`shrink-0 basis-40 flex items-center justify-center gap-2 py-0.5 px-2 rounded-2xl ${activeFilter === item.title ? "ring-2 ring-primary" : ""}`}
+              onClick={async (e) => setActiveFilter(item.title)}
             >
               <Image width={50} height={50} src={item.img} alt={item.title} />
               <span className="text-sm md:text-base font-bold truncate">
@@ -110,7 +139,7 @@ const Pets = () => {
 
         {/* Data Grid */}
         {!isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
             {pets?.map((item) => (
               <div
                 key={item._id}
