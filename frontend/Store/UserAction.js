@@ -42,4 +42,15 @@ export const useUserActions = create((set) => ({
       errorMessage(error.response?.data?.message);
     }
   },
+
+  petData: async ({ id }) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(`${API_URL}/user/pet/${id}`);
+      set({ pet: res.data.post, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      errorMessage(error.response?.data?.message);
+    }
+  },
 }));

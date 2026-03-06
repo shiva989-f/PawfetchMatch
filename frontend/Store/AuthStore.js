@@ -8,7 +8,7 @@ axios.defaults.withCredentials = true;
 export const useAuthStore = create((set) => ({
   isLoading: false,
   isAuthenticated: false,
-  isCheckingAuth: false,
+  isCheckingAuth: true,
   user: null,
 
   signup: async (formData) => {
@@ -110,9 +110,9 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axios.get(`${API_URL}/auth/check-auth`);
       set({
-        isCheckingAuth: false,
         user: res.data.user,
         isAuthenticated: res.data.user.isVerified,
+        isCheckingAuth: false,
       });
     } catch (error) {
       set({ isCheckingAuth: false, isAuthenticated: false });

@@ -52,7 +52,8 @@ const Pets = () => {
         page,
         limit: 10,
       });
-    } else if (activeFilter) {
+    }
+    if (activeFilter) {
       searchPets({
         query: activeFilter,
         page,
@@ -107,7 +108,7 @@ const Pets = () => {
 
         <div className="hidden sm:flex w-full overflow-x-auto gap-2 mt-6 scrollbar-hide py-2">
           <div
-            className="bg-secondary flex items-center justify-center gap-2 y-0.5 px-4 rounded-2xl"
+            className="bg-secondary flex items-center justify-center gap-2 y-0.5 px-4 rounded-2xl cursor-pointer hover:scale-95 transition-all duration-100 ease-in shadow"
             onClick={() => {
               setActiveFilter("");
               setQuery("");
@@ -120,7 +121,7 @@ const Pets = () => {
             <div
               key={index}
               style={{ background: item.bgColor }}
-              className={`shrink-0 basis-40 flex items-center justify-center gap-2 py-0.5 px-2 rounded-2xl ${activeFilter === item.title ? "ring-2 ring-primary" : ""}`}
+              className={`shrink-0 basis-40 flex items-center justify-center gap-2 py-0.5 px-2 rounded-2xl cursor-pointer hover:scale-95 transition-all duration-100 ease-in shadow ${activeFilter === item.title ? "ring-2 ring-primary" : ""}`}
               onClick={async (e) => setActiveFilter(item.title)}
             >
               <Image width={50} height={50} src={item.img} alt={item.title} />
@@ -178,7 +179,14 @@ const Pets = () => {
                   </div>
                 </div>
                 <div className="px-4 pb-4 text-center">
-                  <button className="primary-btn py-1 w-full">Adopt Now</button>
+                  <button
+                    className="primary-btn py-1 w-full"
+                    onClick={() => {
+                      router.push(`/pet/${item._id}`);
+                    }}
+                  >
+                    Adopt Now
+                  </button>
                 </div>
               </div>
             ))}

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
 import {
-  browsePets,
+  browsePosts,
   createPost,
   deletePost,
+  postDetails,
   reportPost,
   reportUser,
   requestAdoption,
@@ -48,7 +49,8 @@ userActionRouter.get(
 );
 userActionRouter.get("/show-own-post/", verifyToken, verifiedUser, showOwnPost);
 
-userActionRouter.get("/pets", verifyToken, verifiedUser, browsePets);
+userActionRouter.get("/pets", verifyToken, verifiedUser, browsePosts);
+userActionRouter.get("/pet/:id", verifyToken, verifiedUser, postDetails);
 userActionRouter.get(
   "/request-adoption/:postId",
   verifyToken,

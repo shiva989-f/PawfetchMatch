@@ -1,4 +1,3 @@
-import { useAuthStore } from "@/Store/AuthStore";
 import { poppins } from "./font";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";

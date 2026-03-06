@@ -6,6 +6,7 @@ import { IoIosArrowBack, IoMdMail } from "react-icons/io";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/Store/AuthStore";
+import Image from "next/image";
 
 const OTP = () => {
   const authStore = useAuthStore();
@@ -14,6 +15,12 @@ const OTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(600); // 600 is seconds which is 10 min
   const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if (!authStore.user) {
+      router.replace("/signup");
+    }
+  }, []);
 
   useEffect(() => {
     if (timer > 0) {
@@ -101,8 +108,8 @@ const OTP = () => {
 
           {/* Pawfect Logo */}
           <div className="flex items-center justify-center mb-2">
-            <div className="w-16 h-16 backdrop-blur-sm rounded-xl flex items-center justify-center mr-3">
-              <img src="/images/logo.png" />
+            <div className="w-16 h-16 backdrop-blur-sm rounded-xl flex items-center justify-center mr-2">
+              <Image width={50} height={50} src="/logo.png" alt="Logo" />
             </div>
             <div>
               <h1 className="text-white text-xl font-bold">Pawfect</h1>
@@ -126,7 +133,7 @@ const OTP = () => {
             </p>
             <p className="text-primary font-semibold flex items-center justify-center mt-1">
               <IoMdMail className="w-4 h-4 mr-2" />
-              {authStore.user?.email}
+              {authStore.user?.email || "user@mail.com"}
             </p>
           </div>
 

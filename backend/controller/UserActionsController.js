@@ -163,7 +163,7 @@ export const showOwnPost = async (req, res) => {
 };
 
 // Browse all posts
-export const browsePets = async (req, res) => {
+export const browsePosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -184,6 +184,21 @@ export const browsePets = async (req, res) => {
       posts,
       success: true,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!", success: false });
+  }
+};
+
+export const postDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await PetPostModel.findById(id);
+    if (!post)
+      return res
+        .status(404)
+        .json({ message: "This post not found!", success: false });
+
+    res.status(200).json({ message: "Post fetched!", post, success: true });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!", success: false });
   }
@@ -333,6 +348,7 @@ export const searchPost = async (req, res) => {
   }
 };
 
+// Show all reports done by user
 export const showReports = async (req, res) => {
   try {
     const userId = req.userData._id.toString();
