@@ -1,18 +1,30 @@
 "use client";
 
 import LoadingSpinner from "@/components/LoadingScreen";
+import ReportPostModal from "@/components/ReportPostModal";
+import SuggestedPets from "@/components/SuggestedPets";
+import { useAuthStore } from "@/Store/AuthStore";
 import { useUserActions } from "@/Store/UserAction";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdLocationPin } from "react-icons/md";
+import { MdLocationPin, MdReportProblem } from "react-icons/md";
 
 const Page = () => {
   const { petData, pet } = useUserActions();
+  const [isVisible, setIsVisible] = useState(false);
   const params = useParams();
   const { id } = params;
 
+  const { logout } = useAuthStore();
+  const router = useRouter();
+
   const [index, setIndex] = useState(0);
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/login");
+  };
 
   useEffect(() => {
     if (id) {
@@ -29,22 +41,29 @@ const Page = () => {
   };
 
   return (
-    <main className="px-4 md:px-10 py-6 min-h-screen bg-gray-50">
-      {/* Logo */}
-      <h1 className="text-3xl font-black text-center mb-14">
-        Pawfect<span className="text-primary">.</span>
-      </h1>
+    <main className="px-4 md:px-10 py-6 min-h-screen bg-gray-50 relative">
+      <div className="flex justify-between items-center mb-14">
+        {/* Logo */}
+        <h1 className="text-3xl font-black text-center">
+          Pawfect<span className="text-primary">.</span>
+        </h1>
+
+        <button className="primary-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
 
       <section className="flex flex-col lg:flex-row gap-12">
         {/* LEFT SIDE */}
-        <div className="w-full lg:w-1/2 flex flex-col items-center">
+        <div className="sm:w-3/5 mx-auto my-12 xl:my-0 xl:w-1/2 flex flex-col items-center">
           {/* Main Image */}
-          <div className="bg-primary p-10 rounded-[30px] shadow-2xl rotate-[-4deg] hover:rotate-0 transition duration-500">
+          <div className="bg-blue-200 p-6 md:p-10 rounded-[30px] shadow-2xl xl:rotate-[-4deg] hover:rotate-0 transition duration-500">
             <Image
               src={pet.images?.[index]?.picURL}
               alt="pet"
               width={12000}
               height={12000}
+              loading="eager"
               className="object-contain rounded-2xl"
             />
 
@@ -54,7 +73,7 @@ const Page = () => {
                 <div
                   key={i}
                   onClick={() => changeImage(i)}
-                  className={`w-24 h-24 cursor-pointer rounded-xl overflow-hidden border-4 ${
+                  className={`w-18 h-18 cursor-pointer rounded-xl overflow-hidden border-4 ${
                     index === i ? "border-white" : "border-transparent"
                   }`}
                 >
@@ -63,6 +82,7 @@ const Page = () => {
                     alt="thumbnail"
                     width={100}
                     height={100}
+                    loading="eager"
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -74,7 +94,13 @@ const Page = () => {
         {/* RIGHT SIDE */}
         <div className="w-full lg:w-1/2 space-y-6">
           {/* Name */}
-          <h2 className="text-5xl font-bold">{pet.animalBreed}</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-4xl font-bold">{pet.animalBreed}</h2>
+            <MdReportProblem
+              className="w-8 h-8 text-primary"
+              onClick={() => setIsVisible((prev) => !prev)}
+            />
+          </div>
 
           {/* Location */}
           <div className="flex items-center text-gray-500 gap-2">
@@ -93,7 +119,7 @@ const Page = () => {
             </span>
 
             <span className="px-6 py-2 rounded-full bg-secondary/20 text-secondary">
-              {pet.animalBreed}
+              {pet.animalType}
             </span>
           </div>
 
@@ -138,6 +164,15 @@ const Page = () => {
           </button>
         </div>
       </section>
+
+      {/* You might also like */}
+      <SuggestedPets
+        location={pet.location}
+        animalBreed={pet.animalBreed}
+        animalType={pet.animalType}
+      />
+
+      <ReportPostModal isVisible={isVisible} setIsVisible={setIsVisible} />
     </main>
   );
 };

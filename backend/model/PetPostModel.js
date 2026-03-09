@@ -49,6 +49,8 @@ const petPostSchema = new mongoose.Schema(
     ],
     adoptionStatus: {
       type: String,
+      enum: ["available", "pending", "adopted"],
+      default: "available",
     },
     postStatus: {
       type: String,

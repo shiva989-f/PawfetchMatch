@@ -4,6 +4,7 @@ import { PetPostModel } from "../model/PetPostModel.js";
 import fs from "fs";
 import { ReportModel } from "../model/ReportModel.js";
 import { User } from "../model/UserModel.js";
+import { NotificationModel } from "../model/NotificationModel.js";
 
 // Create post
 export const createPost = async (req, res) => {
@@ -234,6 +235,15 @@ export const requestAdoption = async (req, res) => {
     // Find post and add user in requests
     await post.updateOne({ $addToSet: { requests: userId } });
 
+    // Create notification
+    await NotificationModel.create({
+      receiver: post.userId,
+      sender: userId,
+      postId: postId,
+      type: "adoption_request",
+      message: "Someone requested to adopt your pet",
+    });
+
     res.status(200).json({ message: "Requested...", success: true });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!", success: false });
@@ -364,4 +374,17 @@ export const showReports = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Something went wrong", success: false });
   }
+};
+
+// Show all notifications
+const getNotifications = async (req, res) => {
+  const userId = req.user.id;
+
+  const notifications = await NotificationModel.find({
+    receiver: userId,
+  })
+    .populate("sender", "name profilePic")
+    .populate("postId");
+
+  res.json(notifications);
 };
