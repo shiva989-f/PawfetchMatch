@@ -241,7 +241,7 @@ export const requestAdoption = async (req, res) => {
       sender: userId,
       postId: postId,
       type: "adoption_request",
-      message: "Someone requested to adopt your pet",
+      message: `${user.username} requested to adopt your pet`,
     });
 
     res.status(200).json({ message: "Requested...", success: true });
@@ -377,14 +377,23 @@ export const showReports = async (req, res) => {
 };
 
 // Show all notifications
-const getNotifications = async (req, res) => {
-  const userId = req.user.id;
+export const getNotifications = async (req, res) => {
+  try {
+    const userId = req.userData._id.toString();
 
-  const notifications = await NotificationModel.find({
-    receiver: userId,
-  })
-    .populate("sender", "name profilePic")
-    .populate("postId");
+    const notifications = await NotificationModel.find({
+      receiver: userId,
+    })
+      .sort({ createdAt: -1 })
+      .populate("sender", "username profilePicUrl")
+      .populate("postId");
 
-  res.json(notifications);
+    res.status(200).json({
+      message: "Got all notification(s)",
+      notifications,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", success: false });
+  }
 };

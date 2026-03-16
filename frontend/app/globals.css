@@ -20,8 +20,8 @@
 
 @layer base {
   body {
-    @apply bg-background bg-[url('/bg_paw.svg')] bg-cover bg-repeat-y bg-center min-h-screen;
-    @apply bg-background text-foreground;
+    @apply bg-background bg-[url('/bg_paw.svg')] bg-cover bg-repeat-y min-h-screen;
+    /* @apply bg-background text-foreground; */
   }
 
   body::-webkit-scrollbar {

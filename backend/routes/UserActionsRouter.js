@@ -4,6 +4,7 @@ import {
   browsePosts,
   createPost,
   deletePost,
+  getNotifications,
   postDetails,
   reportPost,
   reportUser,
@@ -75,6 +76,12 @@ userActionRouter.post(
 );
 
 userActionRouter.get("/search-post", verifyToken, verifiedUser, searchPost);
+userActionRouter.get(
+  "/notifications/:receiverId",
+  verifyToken,
+  verifiedUser,
+  getNotifications,
+);
 userActionRouter.get("/show-reports", verifyToken, verifiedUser, showReports);
 
 export default userActionRouter;

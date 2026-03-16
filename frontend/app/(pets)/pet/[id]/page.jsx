@@ -1,6 +1,7 @@
 "use client";
 
 import LoadingSpinner from "@/components/LoadingScreen";
+import Navbar from "@/components/Navbar";
 import ReportPostModal from "@/components/ReportPostModal";
 import SuggestedPets from "@/components/SuggestedPets";
 import { useAuthStore } from "@/Store/AuthStore";
@@ -11,24 +12,20 @@ import { useEffect, useState } from "react";
 import { MdLocationPin, MdReportProblem } from "react-icons/md";
 
 const Page = () => {
-  const { petData, pet } = useUserActions();
+  const { user } = useAuthStore();
+  const { getPetData, pet, requestAdoption } = useUserActions();
   const [isVisible, setIsVisible] = useState(false);
   const params = useParams();
   const { id } = params;
 
-  const { logout } = useAuthStore();
   const router = useRouter();
 
   const [index, setIndex] = useState(0);
 
-  const handleLogout = async () => {
-    await logout();
-    router.replace("/login");
-  };
-
+  // Fetch Pet Data
   useEffect(() => {
     if (id) {
-      petData({ id });
+      getPetData({ id });
     }
   }, [id]);
 
@@ -40,24 +37,20 @@ const Page = () => {
     setIndex(i);
   };
 
-  return (
-    <main className="px-4 md:px-10 py-6 min-h-screen bg-gray-50 relative">
-      <div className="flex justify-between items-center mb-14">
-        {/* Logo */}
-        <h1 className="text-3xl font-black text-center">
-          Pawfect<span className="text-primary">.</span>
-        </h1>
+  const handleRequestAdoption = async () => {
+    const { _id: postId } = pet;
+    await requestAdoption({ postId });
+  };
 
-        <button className="primary-btn" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+  return (
+    <main className="px-4 md:px-10 py-6 min-h-screen relative">
+      <Navbar />
 
       <section className="flex flex-col lg:flex-row gap-12">
         {/* LEFT SIDE */}
         <div className="sm:w-3/5 mx-auto my-12 xl:my-0 xl:w-1/2 flex flex-col items-center">
           {/* Main Image */}
-          <div className="bg-blue-200 p-6 md:p-10 rounded-[30px] shadow-2xl xl:rotate-[-4deg] hover:rotate-0 transition duration-500">
+          <div className="bg-primary/20 p-6 md:p-10 rounded-[30px] shadow-2xl xl:rotate-[-4deg] hover:rotate-0 transition duration-500">
             <Image
               src={pet.images?.[index]?.picURL}
               alt="pet"
@@ -159,7 +152,10 @@ const Page = () => {
           </div>
 
           {/* Button */}
-          <button className="primary-btn w-full py-4 rounded-full text-lg">
+          <button
+            className="primary-btn w-full py-3 rounded-full text-lg"
+            onClick={handleRequestAdoption}
+          >
             Request to adopt
           </button>
         </div>

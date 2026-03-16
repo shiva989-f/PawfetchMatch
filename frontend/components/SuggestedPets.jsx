@@ -16,7 +16,6 @@ const SuggestedPets = ({ location, animalBreed, animalType }) => {
       page: 1,
       limit: 10,
     });
-    console.log(pets);
   }, []);
   return (
     <section className="my-20">
@@ -52,7 +51,9 @@ const SuggestedPets = ({ location, animalBreed, animalType }) => {
                   {/* <span className="text-gray-600">•</span> */}
                   <div className="flex justify-start items-center gap-2">
                     <CgSandClock className="text-primary" />
-                    <p className="text-sm text-gray-600">{item.age} year(s)</p>
+                    <p className="text-sm text-gray-600">
+                      {item.age} year(s) old
+                    </p>
                   </div>
                 </div>
 

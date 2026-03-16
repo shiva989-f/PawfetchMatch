@@ -1,4 +1,4 @@
-import { errorMessage } from "@/utils/HandleToast";
+import { errorMessage, successMessage } from "@/utils/HandleToast";
 import { create } from "zustand";
 import axios from "axios";
 
@@ -43,11 +43,36 @@ export const useUserActions = create((set) => ({
     }
   },
 
-  petData: async ({ id }) => {
+  getPetData: async ({ id }) => {
     set({ isLoading: true });
     try {
       const res = await axios.get(`${API_URL}/user/pet/${id}`);
       set({ pet: res.data.post, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      errorMessage(error.response?.data?.message);
+    }
+  },
+
+  requestAdoption: async ({ postId }) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(`${API_URL}/user/request-adoption/${postId}`);
+      set({ isLoading: false });
+      successMessage(res.data.message);
+    } catch (error) {
+      set({ isLoading: false });
+      errorMessage(error.response?.data?.message);
+    }
+  },
+
+  getNotifications: async ({ receiverId }) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(
+        `${API_URL}/user/notifications/${receiverId}`,
+      );
+      set({ notifications: res.data.notifications, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       errorMessage(error.response?.data?.message);

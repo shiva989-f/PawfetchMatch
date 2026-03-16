@@ -6,13 +6,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BsGenderNeuter, BsSearch } from "react-icons/bs";
 import { LuMapPin } from "react-icons/lu";
-import { CgSandClock } from "react-icons/cg";
-import { useAuthStore } from "@/Store/AuthStore";
 import { useRouter } from "next/navigation";
 import { MdFilterAltOff } from "react-icons/md";
+import { useAuthStore } from "@/Store/AuthStore";
+import { FaCalendarAlt } from "react-icons/fa";
+import Navbar from "@/components/Navbar";
 
 const Pets = () => {
-  const { logout } = useAuthStore();
+  const { user } = useAuthStore();
   const router = useRouter();
   const { searchPets } = useUserActions();
   const { getPetsData, pets, totalPages, isLoading } = useUserActions();
@@ -29,11 +30,6 @@ const Pets = () => {
     { img: "/rabbit.png", title: "Rabbits", bgColor: "#B1FFDC" },
     { img: "/hamster.png", title: "Hamster", bgColor: "#FECDD0" },
   ];
-
-  const handleLogout = async () => {
-    await logout();
-    router.replace("/login");
-  };
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -68,24 +64,24 @@ const Pets = () => {
     <main>
       <section className="px-4 md:px-8 py-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
-            Adopt <span className="text-secondary">Pets</span> Today
-          </h1>
-          <button className="primary-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-        <p className="text-xs sm:text-base">Find your perfect furry friend</p>
+        <Navbar />
 
         {/* Search */}
-        <div className="w-full mt-10">
-          <div className="w-full md:w-1/2 flex items-center mx-auto py-2 px-4 rounded-xl border border-primary bg-primary/5">
+        <div className="w-full mt-8 flex justify-between items-center gap-5 flex-col lg:flex-row">
+          <div>
+            <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
+              Adopt <span className="text-secondary">Pets</span> Today
+            </h1>
+            <p className="text-xs sm:text-base">
+              Find your perfect furry friend
+            </p>
+          </div>
+          <div className="w-full lg:w-1/2 flex items-end py-2 px-4 rounded-xl border border-primary bg-primary/5">
             <BsSearch />
             <input
               type="text"
               enterKeyHint="search"
-              placeholder="Type a query"
+              placeholder="Find your companion"
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -106,7 +102,7 @@ const Pets = () => {
           </div>
         </div>
 
-        <div className="hidden sm:flex w-full overflow-x-auto gap-2 mt-6 scrollbar-hide py-2">
+        <div className="relative flex w-full overflow-x-auto gap-2 mt-6 scrollbar-hide py-2">
           <div
             className="bg-secondary flex items-center justify-center gap-2 y-0.5 px-4 rounded-2xl cursor-pointer hover:scale-95 transition-all duration-100 ease-in shadow"
             onClick={() => {
@@ -131,6 +127,8 @@ const Pets = () => {
               </span>{" "}
             </div>
           ))}{" "}
+          {/* // Todo */}
+          <div className="xl:hidden absolute right-0 top-0 w-10 h-full bg-black blur-sm"></div>
         </div>
 
         {/* Loading State */}
@@ -166,9 +164,11 @@ const Pets = () => {
                     </div>
                     {/* <span className="text-gray-600">•</span> */}
                     <div className="flex justify-start items-center gap-2">
-                      <CgSandClock className="text-primary" />
+                      <FaCalendarAlt className="text-primary" />
                       <p className="text-sm text-gray-600">
-                        {item.age} year(s)
+                        {item.age > 1
+                          ? `${item.age} years old`
+                          : `${item.age} year old`}
                       </p>
                     </div>
                   </div>

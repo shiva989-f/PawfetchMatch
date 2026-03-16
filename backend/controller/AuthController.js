@@ -11,7 +11,6 @@ import {
 import { uploadFile } from "../cloudinary/cloudinary.config.js";
 import fs from "fs";
 import { createJwtSaveInCookies } from "../utils/CreateJwtSaveCookie.js";
-import { log } from "console";
 
 // Signup functionality so we do not have to repeat in signup and adminSignup
 const signupData = async (req) => {

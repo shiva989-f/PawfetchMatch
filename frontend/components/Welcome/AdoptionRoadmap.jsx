@@ -6,9 +6,9 @@ const AdoptionRoadmap = () => {
   const roadmapSteps = [
     {
       number: "01",
-      title: "Create an Account",
+      title: "Create Your Account",
       description:
-        "Create your account using email or social login to get started quickly and securely on the app.",
+        "Register using your phone number and verify it with OTP. This ensures every user on Pawfect is real and helps keep the adoption community safe.",
       bgColor: "#CFDEFF",
       animalImage: "/step_1.png",
       iconImage: "/icon_1.png",
@@ -16,9 +16,9 @@ const AdoptionRoadmap = () => {
     },
     {
       number: "02",
-      title: "Complete Profile",
+      title: "Complete Your Profile",
       description:
-        "Fill in basic details and preferences so the app can personalize features according to your needs.",
+        "Add your name, city, and optional profile photo. A complete profile helps pet owners and adopters trust each other during the adoption process.",
       bgColor: "#FECDD0",
       animalImage: "/step_2.png",
       iconImage: "/icon_2.png",
@@ -26,9 +26,9 @@ const AdoptionRoadmap = () => {
     },
     {
       number: "03",
-      title: "Explore Dashboard",
+      title: "Find a Pet",
       description:
-        "Navigate through the dashboard to understand tools, features, and options designed to simplify your experience.",
+        "Explore pets and rescued animals listed by other users. View details like age, health condition, vaccination status, and location before requesting adoption.",
       bgColor: "#D3FFB1",
       animalImage: "/step_3.png",
       iconImage: "/icon_3.png",
@@ -36,9 +36,9 @@ const AdoptionRoadmap = () => {
     },
     {
       number: "04",
-      title: "Use Core Features",
+      title: "Post an Animal for Adoption",
       description:
-        "Start using the main features of the app to perform tasks efficiently and achieve your goals faster.",
+        "Found a stray or cannot care for your pet anymore? Capture photos using the in-app camera and post the animal for free adoption so someone can give it a loving home.",
       bgColor: "#FEC1DA",
       animalImage: "/step_4.png",
       iconImage: "/icon_4.png",
@@ -46,9 +46,9 @@ const AdoptionRoadmap = () => {
     },
     {
       number: "05",
-      title: "Track Progress",
+      title: "Send or Manage Adoption Requests",
       description:
-        "Monitor your activity, progress, and results in real time to stay motivated and improve consistently.",
+        "Users can request to adopt a pet, while owners can review all requests, see interested adopters, and choose the best home for the animal.",
       bgColor: "#B1FFDC",
       animalImage: "/step_5.png",
       iconImage: "/icon_5.png",
@@ -56,9 +56,9 @@ const AdoptionRoadmap = () => {
     },
     {
       number: "06",
-      title: "Get Support",
+      title: "Connect and Complete Adoption",
       description:
-        "Access help guides, FAQs, or customer support whenever you need assistance or face any issues.",
+        "Chat with the pet owner or adopter, discuss details, and finalize the adoption responsibly. Pawfect only connects people — adoption is always free.",
       bgColor: "#91FFF4",
       animalImage: "/step_6.png",
       iconImage: "/icon_6.png",
