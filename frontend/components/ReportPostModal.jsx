@@ -1,7 +1,10 @@
+import { useUserActions } from "@/Store/UserAction";
 import { useEffect, useState } from "react";
+import { FaCircleNotch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
-const ReportPostModal = ({ isVisible, setIsVisible }) => {
+const ReportPostModal = ({ isVisible, setIsVisible, postId }) => {
+  const { reportPost, isLoading } = useUserActions();
   const [reportData, setReportData] = useState({
     reason: "",
     description: "",
@@ -26,8 +29,12 @@ const ReportPostModal = ({ isVisible, setIsVisible }) => {
       [e.target.name]: e.target.value,
     });
 
-  const handleSubmit = () => {
-    console.log(reportData);
+  const handleSubmit = async () => {
+    await reportPost({
+      targetId: postId,
+      reason: reportData.reason,
+      description: reportData.description,
+    });
   };
   return (
     <div
@@ -87,8 +94,13 @@ const ReportPostModal = ({ isVisible, setIsVisible }) => {
             <button
               className="primary-btn px-10 py-2 w-full rounded-full my-6 text-lg"
               onClick={handleSubmit}
+              disabled={isLoading}
             >
-              Report
+              {isLoading ? (
+                <FaCircleNotch className="animate-spin text-lg" />
+              ) : (
+                "Report Post"
+              )}
             </button>
           </div>
         </div>

@@ -2,12 +2,21 @@ import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema(
   {
-    senderId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    receiverId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    chatId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Chat",
+    },
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     text: String,
-    image: [
+    images: [
       {
-        publicUrl: { type: String, required: true },
+        picId: String,
+        picURL: String,
       },
     ],
     status: {
@@ -16,7 +25,7 @@ const MessageSchema = new mongoose.Schema(
       default: "sent",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Message = mongoose.model("Message", MessageSchema);

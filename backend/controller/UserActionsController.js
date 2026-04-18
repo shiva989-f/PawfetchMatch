@@ -5,6 +5,7 @@ import fs from "fs";
 import { ReportModel } from "../model/ReportModel.js";
 import { User } from "../model/UserModel.js";
 import { NotificationModel } from "../model/NotificationModel.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Create post
 export const createPost = async (req, res) => {
@@ -41,7 +42,9 @@ export const createPost = async (req, res) => {
         .status(400)
         .json({ message: "File size limit exceeded", success: false });
     }
-    res.status(500).json({ message: "Something went wrong!", success: false });
+    res
+      .status(500)
+      .json({ message: "Something went wrong!", error, success: false });
   }
 };
 
@@ -146,17 +149,11 @@ export const deletePost = async (req, res) => {
 };
 
 // Show own post
-export const showOwnPost = async (req, res) => {
+export const showUserPost = async (req, res) => {
   const userId = req.userData._id.toString();
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const skip = (page - 1) * limit;
   const posts = await PetPostModel.find({ userId })
     .populate({ path: "requests", select: "username" }) // populate user id stored in requests and select only username from User model, ref given in PetPostModel request array
-    .skip(skip)
-    .limit(limit)
-    .sort({ createdAt: -1 })
-    .lean();
+    .sort({ createdAt: -1 });
   if (!posts)
     return res.status(404).json({ message: "No Post!", success: false });
 
@@ -377,7 +374,7 @@ export const showReports = async (req, res) => {
 };
 
 // Show all notifications
-export const getNotifications = async (req, res) => {
+export const getAllNotification = async (req, res) => {
   try {
     const userId = req.userData._id.toString();
 
@@ -385,7 +382,7 @@ export const getNotifications = async (req, res) => {
       receiver: userId,
     })
       .sort({ createdAt: -1 })
-      .populate("sender", "username profilePicUrl")
+      .populate("sender", "_id username profilePicUrl")
       .populate("postId");
 
     res.status(200).json({
@@ -395,5 +392,80 @@ export const getNotifications = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong", success: false });
+  }
+};
+
+// Show notification
+export const getNotification = async (req, res) => {
+  try {
+    const userId = req.userData._id.toString();
+    const notificationId = req.params.notificationId;
+
+    const notification = await NotificationModel.findById(notificationId)
+      .populate("sender", "_id username profilePicUrl")
+      .populate("postId");
+
+    res.status(200).json({
+      message: "Notification fetched!",
+      notification,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", success: false });
+  }
+};
+
+// Chatbot API
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const isPetQuery = (msg) => {
+  const keywords = [
+    "dog",
+    "cat",
+    "pet",
+    "puppy",
+    "kitten",
+    "food",
+    "health",
+    "vaccination",
+    "breed",
+    "training",
+    "animal",
+    "vet",
+  ];
+
+  return keywords.some((word) => msg.toLowerCase().includes(word));
+};
+
+export const chatbot = async (req, res) => {
+  const { message } = req.body;
+
+  if (!isPetQuery(message)) {
+    return res.json({
+      reply: "I only answer pet-related questions 🐶",
+    });
+  }
+
+  try {
+    // Use Gemini model
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+    });
+
+    const result = await model.generateContent(
+      `You are a helpful pet expert. Give short and clear answers. Do not reply to the question which is not related to pet care, pet health etc\nQuestion: ${message}`,
+    );
+
+    const reply = result.response.text() || "No response";
+
+    res.status(200).json({ reply });
+  } catch (error) {
+    console.error("GEMINI ERROR:", error);
+
+    res.status(500).json({
+      message: "Something went wrong",
+      success: false,
+      details: error.message,
+    });
   }
 };

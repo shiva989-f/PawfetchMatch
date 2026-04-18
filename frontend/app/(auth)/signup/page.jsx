@@ -9,7 +9,7 @@ import { useAuthStore } from "@/Store/AuthStore";
 import { FaCircleNotch } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 
-const Signup = () => {
+const Page = () => {
   const router = useRouter();
   const authStore = useAuthStore();
 
@@ -317,4 +317,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Page;

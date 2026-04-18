@@ -12,13 +12,10 @@ import { useEffect, useState } from "react";
 import { MdLocationPin, MdReportProblem } from "react-icons/md";
 
 const Page = () => {
-  const { user } = useAuthStore();
   const { getPetData, pet, requestAdoption } = useUserActions();
   const [isVisible, setIsVisible] = useState(false);
   const params = useParams();
   const { id } = params;
-
-  const router = useRouter();
 
   const [index, setIndex] = useState(0);
 
@@ -50,7 +47,7 @@ const Page = () => {
         {/* LEFT SIDE */}
         <div className="sm:w-3/5 mx-auto my-12 xl:my-0 xl:w-1/2 flex flex-col items-center">
           {/* Main Image */}
-          <div className="bg-primary/20 p-6 md:p-10 rounded-[30px] shadow-2xl xl:rotate-[-4deg] hover:rotate-0 transition duration-500">
+          <div className="bg-primary/80 p-6 md:p-10 rounded-[30px] shadow-2xl xl:rotate-[-4deg] hover:rotate-0 transition duration-500">
             <Image
               src={pet.images?.[index]?.picURL}
               alt="pet"
@@ -103,54 +100,70 @@ const Page = () => {
 
           {/* Tags */}
           <div className="flex flex-wrap gap-4">
-            <span className="px-6 py-2 rounded-full bg-secondary/20 text-secondary">
+            <span className="px-6 py-2 rounded-full bg-primary/20 text-primary">
               {pet.gender}
             </span>
 
-            <span className="px-6 py-2 rounded-full bg-secondary/20 text-secondary">
+            <span className="px-6 py-2 rounded-full bg-primary/20 text-primary">
               {pet.age} Years
             </span>
 
-            <span className="px-6 py-2 rounded-full bg-secondary/20 text-secondary">
+            <span className="px-6 py-2 rounded-full bg-primary/20 text-primary">
               {pet.animalType}
             </span>
           </div>
 
           {/* Health */}
-          <div className="border rounded-xl p-5 bg-white">
-            <h3 className="text-lg font-semibold mb-2">Medical Information</h3>
-
-            <div className="space-y-3 text-gray-700">
-              <div className="flex justify-between">
-                <span className="font-medium text-gray-500">
-                  Health Condition
+          <div className="bg-white rounded-2xl border border-[#ede8e0] p-5">
+            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+              Medical Information
+            </h3>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400 capitalize">
+                  {pet.healthCondition}
                 </span>
-                <span className="capitalize">{pet.healthCondition}</span>
+                <span
+                  className="text-sm font-medium px-3 py-0.5 rounded-full"
+                  style={{ background: "#f5f0e8", color: "#5a4a3a" }}
+                >
+                  {pet.healthCondition}
+                </span>
               </div>
-
-              <div className="flex justify-between">
-                <span className="font-medium text-gray-500">
-                  Vaccination Status
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400 capitalize">
+                  {pet.vaccinationStatus}
                 </span>
-                <span className="capitalize">{pet.vaccinationStatus}</span>
+                <span
+                  className="text-sm font-medium px-3 py-0.5 rounded-full"
+                  style={{ background: "#f5f0e8", color: "#5a4a3a" }}
+                >
+                  {pet.vaccinationStatus}
+                </span>
               </div>
-
-              <div className="flex justify-between">
-                <span className="font-medium text-gray-500">
-                  Sterilization Status
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400 capitalize">
+                  {pet.sterilizationStatus}
                 </span>
-                <span className="capitalize">{pet.sterilizationStatus}</span>
+                <span
+                  className="text-sm font-medium px-3 py-0.5 rounded-full"
+                  style={{ background: "#f5f0e8", color: "#5a4a3a" }}
+                >
+                  {pet.sterilizationStatus}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="border rounded-xl p-5 bg-white">
-            <h3 className="font-semibold text-lg mb-2">Description</h3>
-
-            <p className="text-gray-600 leading-relaxed">{pet.description}</p>
+          {/* Description card */}
+          <div className="bg-white rounded-2xl border border-[#ede8e0] p-5">
+            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              About
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {pet.description}
+            </p>
           </div>
-
           {/* Button */}
           <button
             className="primary-btn w-full py-3 rounded-full text-lg"
@@ -168,7 +181,11 @@ const Page = () => {
         animalType={pet.animalType}
       />
 
-      <ReportPostModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <ReportPostModal
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        postId={pet._id}
+      />
     </main>
   );
 };

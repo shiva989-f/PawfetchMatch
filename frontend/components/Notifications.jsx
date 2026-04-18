@@ -4,18 +4,19 @@ import { useEffect, useRef } from "react";
 import LoadingSpinner from "./LoadingScreen";
 import Image from "next/image";
 import { IoMdClose } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 const Notifications = ({ isNotificationVisible, closeNotifications }) => {
   const { user } = useAuthStore();
-  const { getNotifications, notifications } = useUserActions();
+  const { getAllNotifications, notifications } = useUserActions();
+  const router = useRouter();
 
   const notificationRef = useRef(null);
 
   useEffect(() => {
     if (user?._id) {
-      getNotifications(user._id);
+      getAllNotifications(user._id);
     }
-    console.log(notifications);
 
     const handleClickOutside = (event) => {
       if (
@@ -56,51 +57,61 @@ const Notifications = ({ isNotificationVisible, closeNotifications }) => {
     <div
       className={`fixed inset-0 z-50 ${
         isNotificationVisible ? "flex" : "hidden"
-      } justify-end`}
+      } justify-end bg-black/30 backdrop-blur-sm`}
     >
       <div
         ref={notificationRef}
-        className="w-87.5 h-screen bg-gray-50 shadow-2xl p-5 overflow-y-auto border-l border-gray-200"
+        className="w-87.5 h-screen bg-white shadow-2xl p-5 overflow-y-auto border-l border-gray-200 flex flex-col"
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Notifications</h2>
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-semibold text-gray-800">Notifications</h2>
           <IoMdClose
-            className="sm:hidden text-primary text-2xl transition-all duration-500 ease-in-out hover:rotate-180"
-            onClick={() => closeNotifications()}
+            className="text-gray-500 text-2xl cursor-pointer hover:text-red-500 transition-transform duration-300 hover:rotate-90"
+            onClick={closeNotifications}
           />
         </div>
 
+        {/* Notifications List */}
         <div className="flex flex-col gap-3">
           {notifications.length === 0 && (
-            <p className="text-sm text-gray-500">No notifications</p>
+            <p className="text-sm text-gray-400 text-center mt-10">
+              No notifications yet
+            </p>
           )}
 
           {notifications.map((notification) => (
             <div
               key={notification._id}
-              className="p-3 rounded-lg bg-white shadow hover:scale-95 transition"
+              className="group flex items-start gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all cursor-pointer"
+              onClick={() => {
+                router.push(`/notification/${notification._id}`);
+              }}
             >
-              <div className="flex items-center gap-3">
+              {/* Avatar */}
+              <div className="relative">
                 <Image
                   src={notification?.sender?.profilePicUrl}
                   width={45}
                   height={45}
                   alt={notification?.sender?.username}
-                  className="rounded-full"
+                  className="rounded-full object-cover"
                 />
-
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium capitalize text-primary">
-                    {notification?.sender?.username}
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    {notification?.message}
-                  </span>
-                </div>
               </div>
-              <p className="text-[8px] text-end">
-                {formatDate(notification.createdAt)}
-              </p>
+
+              {/* Content */}
+              <div className="flex flex-col flex-1">
+                <p className="text-sm text-gray-800 leading-snug">
+                  <span className="font-semibold text-gray-900 capitalize">
+                    {notification?.sender?.username}
+                  </span>{" "}
+                  {notification?.message}
+                </p>
+
+                <span className="text-xs text-gray-400 mt-1">
+                  {formatDate(notification.createdAt)}
+                </span>
+              </div>
             </div>
           ))}
         </div>

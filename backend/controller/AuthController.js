@@ -8,7 +8,7 @@ import {
   sendVerificationMail,
   sendWelcomeEmail,
 } from "../nodemailer/EmailSender.js";
-import { uploadFile } from "../cloudinary/cloudinary.config.js";
+import { deleteImage, uploadFile } from "../cloudinary/cloudinary.config.js";
 import fs from "fs";
 import { createJwtSaveInCookies } from "../utils/CreateJwtSaveCookie.js";
 
@@ -227,6 +227,42 @@ export const login = async (req, res) => {
       error: error.message,
       success: false,
     });
+  }
+};
+
+// Update User API http://localhost:3000/api/auth/login
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Handle profile picture update
+    if (req.file) {
+      // Delete old image from cloudinary
+      if (user.profilePicId) {
+        await deleteImage(user.profilePicId); // your existing delete util
+      }
+      const upload = await uploadFile(req.file.path);
+      fs.unlinkSync(req.file.path);
+      if (!upload) throw new Error("Image upload failed");
+      user.profilePicId = upload.public_id;
+      user.profilePicUrl = upload.secure_url;
+    }
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully!",
+      user: { ...user._doc, password: undefined },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 

@@ -93,20 +93,20 @@ const Login = () => {
                 name="email"
                 value={loginData.email}
                 onChange={handleChange}
-                className="py-2 px-4 border rounded-md"
+                className="py-2 px-4 border rounded-md focus-within:border-primary border-primary"
               />
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-2">
               <label>Password</label>
-              <div className="flex justify-between items-center py-2 px-4 border rounded-md">
+              <div className="flex justify-between items-center py-2 px-4 border border-primary rounded-md">
                 <input
                   type={isPasswordVisible ? "text" : "password"}
                   name="password"
                   value={loginData.password}
                   onChange={handleChange}
-                  className="w-full outline-none pr-2"
+                  className="w-full outline-none pr-2 focus-within:border-primary"
                 />
                 <span
                   className="cursor-pointer"

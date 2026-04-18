@@ -42,24 +42,13 @@ export const showAllUsersAdmin = async (req, res) => {
 // Show all reported posts
 export const reportedPosts = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const totalPosts = await ReportModel.countDocuments({
-      targetType: "PetPost",
-    });
     const posts = await ReportModel.find({ targetType: "PetPost" })
       .populate("targetId") // populate targetId with specific fields from PetPost
-      .populate("reporterId", "username email") // populate reporterId with name and email fields
-      .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: -1 })
-      .lean();
+      .populate("reporterId", "username email profilePicUrl") // populate reporterId with name and email fields
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       message: "Reported Post fetched successfully!",
-      totalPosts,
-      totalPage: Math.ceil(totalPosts / limit),
       posts,
       success: true,
     });

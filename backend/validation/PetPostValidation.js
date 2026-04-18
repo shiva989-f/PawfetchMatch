@@ -22,33 +22,33 @@ export const petPostValidation = (req, res, next) => {
       .valid(
         "Healthy",
         "Minor Treatable issue",
-        "special needs",
-        "under treatment",
-        "recovering",
-        "unknown",
+        "Special needs",
+        "Under treatment",
+        "Recovering",
+        "Unknown",
       )
       .required(),
     vaccinationStatus: joi
       .string()
       .trim()
       .valid(
-        "fully vaccinated",
-        "partially vaccinated",
-        "not vaccinated",
-        "not required",
-        "vaccination in progress",
-        "unknown",
+        "Fully vaccinated",
+        "Partially vaccinated",
+        "Not vaccinated",
+        "Not required",
+        "Vaccination in progress",
+        "Unknown",
       )
       .required(),
     sterilizationStatus: joi
       .string()
       .trim()
       .valid(
-        "sterilized",
-        "not sterilized",
-        "scheduled",
-        "not applicable",
-        "unknown",
+        "Sterilized",
+        "Not sterilized",
+        "Scheduled",
+        "Not applicable",
+        "Unknown",
       )
       .required(),
     location: joi.string().trim().required(),
@@ -62,7 +62,7 @@ export const petPostValidation = (req, res, next) => {
         }),
       )
       .optional(),
-    adoptionStatus: joi.string().trim().optional(),
+    adoptionStatus: joi.string().trim().optional().default("available"),
     requests: joi.array().items(joi.string().custom(objectId)).optional(),
     dateOfListing: joi.date().optional(),
   });

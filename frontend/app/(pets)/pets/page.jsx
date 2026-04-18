@@ -11,6 +11,7 @@ import { MdFilterAltOff } from "react-icons/md";
 import { useAuthStore } from "@/Store/AuthStore";
 import { FaCalendarAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
+import { poppins } from "@/app/font";
 
 const Pets = () => {
   const { user } = useAuthStore();
@@ -62,7 +63,7 @@ const Pets = () => {
 
   return (
     <main>
-      <section className="px-4 md:px-8 py-6">
+      <section className="px-4 md:px-8 pb-6">
         {/* Header */}
         <Navbar />
 
@@ -76,7 +77,7 @@ const Pets = () => {
               Find your perfect furry friend
             </p>
           </div>
-          <div className="w-full lg:w-1/2 flex items-end py-2 px-4 rounded-xl border border-primary bg-primary/5">
+          <div className="w-full lg:w-1/2 flex items-center py-2 px-4 rounded-xl border border-primary bg-primary/5">
             <BsSearch />
             <input
               type="text"
@@ -122,13 +123,10 @@ const Pets = () => {
             >
               <Image width={50} height={50} src={item.img} alt={item.title} />
               <span className="text-sm md:text-base font-bold truncate">
-                {" "}
-                {item.title}{" "}
-              </span>{" "}
+                {item.title}
+              </span>
             </div>
-          ))}{" "}
-          {/* // Todo */}
-          <div className="xl:hidden absolute right-0 top-0 w-10 h-full bg-black blur-sm"></div>
+          ))}
         </div>
 
         {/* Loading State */}
@@ -138,11 +136,11 @@ const Pets = () => {
 
         {/* Data Grid */}
         {!isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6 mt-10">
             {pets?.map((item) => (
               <div
                 key={item._id}
-                className="shadow-xl rounded-xl overflow-hidden transition-all duration-500 ease-in-out hover:scale-105"
+                className="bg-white shadow-xl rounded-xl overflow-hidden transition-all duration-500 ease-in-out hover:scale-105"
               >
                 {/* Pet Image */}
                 <div className="relative w-full h-52">
@@ -152,25 +150,30 @@ const Pets = () => {
                     fill
                     className="object-cover"
                   />
+                  <span className="text-primary absolute top-2 right-2 bg-white rounded-full py-1 px-3">
+                    {item.age > 1 ? `${item.age} yrs` : `${item.age} yr`}
+                  </span>
                 </div>
 
                 {/* Pet Info */}
                 <div className="p-4 space-y-1">
-                  <h2 className="font-semibold text-lg">{item.animalBreed}</h2>
-                  <div className="flex justify-start items-center gap-2">
-                    <div className="flex justify-start items-center gap-2">
-                      <BsGenderNeuter className="text-primary" />
-                      <p className="text-sm text-gray-600">{item.gender}</p>
-                    </div>
-                    {/* <span className="text-gray-600">•</span> */}
-                    <div className="flex justify-start items-center gap-2">
-                      <FaCalendarAlt className="text-primary" />
-                      <p className="text-sm text-gray-600">
-                        {item.age > 1
-                          ? `${item.age} years old`
-                          : `${item.age} year old`}
-                      </p>
-                    </div>
+                  <div className="flex justify-between items-center gap-2">
+                    <h2 className="font-semibold text-lg">
+                      {item.animalBreed}
+                    </h2>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 600,
+                        padding: "3px 10px",
+                        borderRadius: 100,
+                        background:
+                          item.gender === "Male" ? "#dbeafe" : "#fce7f3",
+                        color: item.gender === "Male" ? "#1d4ed8" : "#be185d",
+                      }}
+                    >
+                      {item.gender}
+                    </span>
                   </div>
 
                   <div className="flex justify-start items-center gap-2">

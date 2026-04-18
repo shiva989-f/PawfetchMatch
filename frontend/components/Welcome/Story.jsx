@@ -1,54 +1,120 @@
 import { alkatra } from "@/app/font";
-import React from "react";
-import Card from "./Card";
-import ImageCarousel from "../ImageCarousel";
+import { stories } from "@/utils/Data";
+import { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Story = () => {
-  const storyDetails = [
-    {
-      imageUrl: "/slide_img_1.jpeg",
-      title: "Sheru’s New Beginning in Jaipur",
-      story: `Left near a crowded bazaar in Jaipur, a small brown dog waited patiently beside a tea stall. He watched every scooter and auto pass by, hoping his owner would return. Days turned into nights, and Sheru grew weaker. A shopkeeper clicked his photo and uploaded it on Pawfect. One evening, a young couple scrolling through the website felt drawn to his gentle eyes. They brought him home, gave him warm rotis, a soft bed, and a name filled with love. Today, Sheru runs happily on their terrace, finally safe and cared for.`,
-      bgColor: "bg-purple-800",
-      author: "Shiva Kumar",
-    },
-    {
-      imageUrl: "/slide_img_2.jpeg",
-      title: "Moti’s Journey from the Streets of Delhi",
-      story: `On a chilly morning in Delhi, Moti was found near a bus stop, shivering and hungry. He had been wandering for days, searching for scraps and shelter. A college student shared his story on Pawfect, hoping someone would notice. A family living nearby saw his photo and felt an instant connection. They visited him the same evening and decided he belonged with them. Now Moti spends his days playing in the courtyard and guarding his new home with pride.`,
-      bgColor: "bg-purple-800",
-      author: "Pankaj Kumar",
-    },
-    {
-      imageUrl: "/slide_img_3.jpeg",
-      title: "Gauri’s Second Chance in Mumbai",
-      story: `During heavy monsoon rains in Mumbai, a frightened white kitten hid under a parked car. She had lost her way and was too scared to move. A kind auto driver rescued her and posted her details on Pawfect. A working professional scrolling through the site paused at Gauri’s photo. Something about her innocence felt special. She adopted Gauri and welcomed her into her apartment. Today, Gauri naps by the window, watching the rain safely from inside her forever home.`,
-      bgColor: "bg-purple-800",
-      author: "Shiva Kumar",
-    },
-    {
-      imageUrl: "/slide_img_4.jpeg",
-      title: "Chintu’s Story of Hope in Amritsar",
-      story: `Near the peaceful lanes of Amritsar, a small pup sat quietly outside a closed shop. He looked tired but hopeful. A passerby noticed him and uploaded his picture on Pawfect. The next day, a retired uncle searching for companionship saw Chintu’s photo and decided to meet him. That meeting changed everything. Chintu now enjoys morning walks, warm milk, and endless affection. He no longer waits for someone who won’t return. He has found a family that will never let him go.`,
-      bgColor: "bg-purple-800",
-      author: "Pankaj Kumar",
-    },
-  ];
+  const [active, setActive] = useState(0);
+  const prev = () =>
+    setActive((a) => (a - 1 + stories.length) % stories.length);
+  const next = () => setActive((a) => (a + 1) % stories.length);
+  const s = stories[active];
+
   return (
-    <section>
-      <h1
-        className={`text-4xl md:text-5xl font-bold ${alkatra.className} mt-20`}
-      >
-        Adoption Is an Act of <span className="text-secondary">Love.</span>
-      </h1>
-      <h3 className={`${alkatra.className} text-xl md:text-2xl mt-2 underline`}>
-        Because Every Life{" "}
-        <span className="underline decoration-secondary text-secondary">
-          Matters.
-        </span>
-      </h3>
-      <div className="card-container">
-        <ImageCarousel storyDetails={storyDetails} />
+    <section className="py-25 px-6 md:px-12 bg-[#FFFDF9]">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-14">
+          <div className="inline-flex items-center gap-1.5 bg-[#FFF0F0] border border-[#FF6B6B]/20 rounded-full py-1.5 px-3.5 mb-4">
+            <span className="text-xs text-[#FF6B6B] font-semibold tracking-wide">
+              ❤️ SUCCESS STORIES
+            </span>
+          </div>
+          <h2
+            className={`${alkatra.className} font-serif text-[clamp(32px,4vw,52px)] font-bold text-[#1a1a1a] m-0 mb-3 tracking-tight`}
+          >
+            Adoption Is an Act
+            <br />
+            of <span className="text-[#FF6B6B]">Love.</span>
+          </h2>
+          <p className="text-[#888] text-base m-0">
+            Because Every Life Matters.
+          </p>
+        </div>
+
+        {/* Story card */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Visual */}
+          <div className="relative">
+            <div
+              className={`rounded-4xl p-12 flex flex-col items-center justify-center min-h-80 relative overflow-hidden transition-colors duration-400 ${s.bgCls}`}
+            >
+              <div
+                className={`absolute -top-10 -right-10 w-50 h-50 rounded-full ${s.blobCls}`}
+              />
+              <span className="text-[80px] mb-4 drop-shadow-[0_8px_20px_rgba(0,0,0,0.1)] transition-all duration-300">
+                {s.emoji}
+              </span>
+              <h3
+                className={`${alkatra.className} font-serif text-[28px] font-bold text-[#1a1a1a] m-0 mb-1`}
+              >
+                {s.name}
+              </h3>
+              <p className="text-[#888] m-0 text-sm">
+                {s.species} · {s.city}
+              </p>
+
+              <div className="flex gap-2 mt-6">
+                {stories.map((story, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className={`h-2 rounded-full border-none cursor-pointer transition-all duration-300 p-0 ${i === active ? `w-6 ${story.bgCls.split("/")[0]}` : "w-2 bg-[#ddd]"}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={prev}
+                className={`flex-1 p-3 bg-white border-[1.5px] border-black/5 rounded-2xl cursor-pointer flex items-center justify-center transition-colors duration-200 text-[#1a1a1a] ${s.hoverBorderCls}`}
+              >
+                <FaChevronLeft />
+              </button>
+              <button
+                onClick={next}
+                className={`flex-1 p-3 bg-white border-[1.5px] border-black/5 rounded-2xl cursor-pointer flex items-center justify-center transition-colors duration-200 text-[#1a1a1a] ${s.hoverBorderCls}`}
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          </div>
+
+          {/* Text */}
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <div
+                className={`w-9 h-9 rounded-lg flex items-center justify-center ${s.bgCls}`}
+              >
+                <span className="text-base">{s.emoji}</span>
+              </div>
+              <span className="text-[13px] font-semibold text-[#888]">
+                {s.city}, India
+              </span>
+            </div>
+
+            <blockquote
+              className={`m-0 mb-7 pl-5 border-l-[3px] text-[17px] text-[#444] leading-[1.8] italic ${s.borderCls}`}
+            >
+              "{s.story}"
+            </blockquote>
+
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-lg bg-linear-to-br ${s.gradCls}`}
+              >
+                👤
+              </div>
+              <div>
+                <p className="m-0 font-semibold text-[#1a1a1a] text-[15px]">
+                  {s.author}
+                </p>
+                <p className="m-0 text-[13px] text-[#999]">Shared on Pawfect</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

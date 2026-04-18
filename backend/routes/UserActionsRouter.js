@@ -2,16 +2,18 @@ import { Router } from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
 import {
   browsePosts,
+  chatbot,
   createPost,
   deletePost,
-  getNotifications,
+  getAllNotification,
+  getNotification,
   postDetails,
   reportPost,
   reportUser,
   requestAdoption,
   searchPost,
-  showOwnPost,
   showReports,
+  showUserPost,
   updatePost,
 } from "../controller/UserActionsController.js";
 import { petPostValidation } from "../validation/PetPostValidation.js";
@@ -48,8 +50,12 @@ userActionRouter.get(
   verifiedUser,
   deletePost,
 );
-userActionRouter.get("/show-own-post/", verifyToken, verifiedUser, showOwnPost);
-
+userActionRouter.get(
+  "/show-user-post/",
+  verifyToken,
+  verifiedUser,
+  showUserPost,
+);
 userActionRouter.get("/pets", verifyToken, verifiedUser, browsePosts);
 userActionRouter.get("/pet/:id", verifyToken, verifiedUser, postDetails);
 userActionRouter.get(
@@ -58,7 +64,6 @@ userActionRouter.get(
   verifiedUser,
   requestAdoption,
 );
-
 userActionRouter.post(
   "/report-post/",
   verifyToken,
@@ -66,7 +71,6 @@ userActionRouter.post(
   reportValidation,
   reportPost,
 );
-
 userActionRouter.post(
   "/report-user/",
   verifyToken,
@@ -74,14 +78,21 @@ userActionRouter.post(
   reportValidation,
   reportUser,
 );
-
 userActionRouter.get("/search-post", verifyToken, verifiedUser, searchPost);
 userActionRouter.get(
   "/notifications/:receiverId",
   verifyToken,
   verifiedUser,
-  getNotifications,
+  getAllNotification,
+);
+
+userActionRouter.get(
+  "/notification/:notificationId",
+  verifyToken,
+  verifiedUser,
+  getNotification,
 );
 userActionRouter.get("/show-reports", verifyToken, verifiedUser, showReports);
+userActionRouter.post("/chatbot", verifyToken, verifiedUser, chatbot);
 
 export default userActionRouter;

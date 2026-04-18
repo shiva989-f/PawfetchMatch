@@ -25,6 +25,21 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  // Admin Signup
+  adminSignup: async (formData) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.post(`${API_URL}/auth/admin/signup`, formData);
+
+      successMessage(res.data.message);
+      set({ isLoading: false, user: res.data.user });
+      return res.data;
+    } catch (error) {
+      errorMessage(error.response?.data?.message);
+      set({ isLoading: false });
+    }
+  },
+
   verifyEmail: async (otp) => {
     set({ isLoading: true });
     try {
@@ -46,6 +61,25 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true });
     try {
       const res = await axios.post(`${API_URL}/auth/login`, loginData);
+      successMessage(res.data.message);
+      set({
+        isLoading: false,
+        user: res.data.user,
+        isAuthenticated: res.data.user.isVerified,
+      });
+      return res.data;
+    } catch (error) {
+      errorMessage(error.response?.data?.message);
+      set({ isLoading: false });
+    }
+  },
+  updateUser: async ({ formData, id }) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.post(
+        `${API_URL}/auth/update-user/${id}`,
+        formData,
+      );
       successMessage(res.data.message);
       set({
         isLoading: false,

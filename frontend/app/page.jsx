@@ -1,12 +1,12 @@
 "use client";
-import Navbar from "@/components/Welcome/Navbar";
-import Hero from "@/components/Welcome/Hero";
-import Story from "@/components/Welcome/Story";
-import AdoptionRoadmap from "@/components/Welcome/AdoptionRoadmap";
-import Footer from "@/components/Welcome/Footer";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/Store/AuthStore";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import Navbar from "@/components/Welcome/Navbar";
+import Hero from "@/components/Welcome/Hero";
+import AdoptionRoadmap from "@/components/Welcome/AdoptionRoadmap";
+import Story from "@/components/Welcome/Story";
+import Footer from "@/components/Welcome/Footer";
 
 const page = () => {
   const router = useRouter();
@@ -18,13 +18,13 @@ const page = () => {
     }
   }, [isAuthenticated, user, isCheckingAuth]);
   return (
-    <main>
+    <div className="font-sans bg-[#FFFDF9] text-[#1a1a1a] min-h-screen">
       <Navbar />
       <Hero />
-      <Story />
       <AdoptionRoadmap />
+      <Story />
       <Footer />
-    </main>
+    </div>
   );
 };
 

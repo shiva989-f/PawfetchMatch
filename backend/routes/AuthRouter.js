@@ -7,6 +7,7 @@ import {
   logout,
   resetPassword,
   signup,
+  updateUser,
   verifyEmail,
 } from "../controller/AuthController.js";
 import {
@@ -32,6 +33,7 @@ authRouter.post(
 authRouter.post("/signup", uploader.single("file"), signupValidation, signup);
 authRouter.post("/verify-email", verifyEmail);
 authRouter.post("/login", loginValidation, login);
+authRouter.post("/update-user/:id", uploader.single("file"), updateUser);
 authRouter.post("/forgot-password", forgotPassword);
 authRouter.post("/reset-password", resetPassword);
 authRouter.get("/check-auth", verifyToken, checkAuth);

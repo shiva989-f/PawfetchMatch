@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { verifyAdmin } from "../middleware/VerifyAdmin.js";
-import { showAllPostsAdmin } from "../controller/AdminController.js ";
 import {
   changeReportStatus,
   managePost,
   manageUser,
   reportedPosts,
   reportedUsers,
+  showAllPostsAdmin,
   showAllUsersAdmin,
 } from "../controller/AdminController.js";
 
