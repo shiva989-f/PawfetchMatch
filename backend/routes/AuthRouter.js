@@ -15,7 +15,7 @@ import {
   signupValidation,
 } from "../validation/AuthValidation.js";
 import multer from "multer";
-import { verifyToken } from "../middleware/verifyToken.js";
+import { verifyToken } from "../middleware/VerifyToken.js";
 
 const uploader = multer({
   storage: multer.diskStorage({}),
