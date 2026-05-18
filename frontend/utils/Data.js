@@ -82,7 +82,7 @@ export const stories = [
     name: "Moti",
     species: "Dog",
     emoji: "🐶",
-    author: "Pankaj Kumar",
+    author: "Shiva Kumar",
     story:
       "On a chilly morning, Moti was found near a bus stop, shivering and hungry. A college student shared his story on Pawfect. A nearby family felt an instant connection and visited him the same evening. Now Moti guards his forever home with pride.",
     colorCls: "text-[#FF9500]",
@@ -112,7 +112,7 @@ export const stories = [
     name: "Chintu",
     species: "Pup",
     emoji: "🐾",
-    author: "Pankaj Kumar",
+    author: "Shiva Kumar",
     story:
       "Near the peaceful lanes of Amritsar, a small pup sat quietly outside a closed shop. A retired uncle searching for companionship saw Chintu's photo and decided to meet him. That meeting changed everything — Chintu now enjoys morning walks and endless affection.",
     colorCls: "text-[#34C759]",
