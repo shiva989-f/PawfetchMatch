@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyToken } from "../middleware/verifyToken.js";
+import { verifyToken } from "../middleware/VerifyToken.js";
 import { verifyAdmin } from "../middleware/VerifyAdmin.js";
 import {
   changeReportStatus,

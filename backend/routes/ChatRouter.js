@@ -8,7 +8,7 @@ import {
   messages,
   sendMessage,
 } from "../controller/ChattingController.js";
-import { verifyToken } from "../middleware/verifyToken.js";
+import { verifyToken } from "../middleware/VerifyToken.js";
 import multer from "multer";
 
 const uploader = multer({
