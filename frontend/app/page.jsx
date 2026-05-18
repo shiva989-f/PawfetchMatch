@@ -1,22 +1,32 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/Store/AuthStore";
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
+
 import Navbar from "@/components/Welcome/Navbar";
 import Hero from "@/components/Welcome/Hero";
 import AdoptionRoadmap from "@/components/Welcome/AdoptionRoadmap";
 import Story from "@/components/Welcome/Story";
 import Footer from "@/components/Welcome/Footer";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
-  const { isAuthenticated, user, isCheckingAuth, checkAuth } = useAuthStore();
+
+  const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
-    if (!isCheckingAuth && isAuthenticated && user?.isVerified) {
+    if (isCheckingAuth) return;
+
+    if (isAuthenticated === true && user && user.isVerified === true) {
       router.replace("/pets");
     }
-  }, [isAuthenticated, user, isCheckingAuth]);
+  }, [isAuthenticated, user, isCheckingAuth, router]);
+
+  if (isCheckingAuth) {
+    return null;
+  }
+
   return (
     <div className="font-sans bg-[#FFFDF9] text-[#1a1a1a] min-h-screen">
       <Navbar />
@@ -28,4 +38,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
