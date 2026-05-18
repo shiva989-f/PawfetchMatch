@@ -13,6 +13,8 @@ import chatRouter from "./routes/ChatRouter.js";
 const PORT = process.env.PORT;
 
 const app = express();
+app.set("trust proxy", 1);
+
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
