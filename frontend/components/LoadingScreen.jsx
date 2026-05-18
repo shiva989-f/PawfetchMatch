@@ -61,7 +61,7 @@ const LoadingSpinner = () => {
   }, []);
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-[#faf8f5] gap-0 font-sans">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#faf8f5] gap-0 font-sans">
       <div className="relative w-24 h-24">
         <div
           className="absolute inset-0 rounded-full border-[2.5px] border-transparent border-t-[#fc5739] border-r-[#fc573933] animate-spin"
@@ -77,20 +77,17 @@ const LoadingSpinner = () => {
           🐾
         </div>
       </div>
-
       <h1
         className="mt-7 text-[30px] font-black tracking-tight text-[#1a1814]"
         style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
       >
         Pawfect<span className="text-[#fc5739]">.</span>
       </h1>
-
       <p
         className={`mt-1.5 text-sm text-[#8c8882] h-5 transition-all duration-400 ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}
       >
         {taglines[tagIndex]}
       </p>
-
       <div className="flex gap-1.5 mt-8">
         {[0, 1, 2].map((i) => (
           <span
@@ -104,7 +101,6 @@ const LoadingSpinner = () => {
           />
         ))}
       </div>
-
       <div className="flex flex-wrap justify-center gap-2.5 mt-9 max-w-xs">
         {pills.map((p, i) => (
           <span
