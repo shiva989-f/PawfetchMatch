@@ -90,7 +90,10 @@ const Footer = () => {
               Join thousands of happy families who adopted through Pawfect.
             </p>
           </div>
-          <button className="bg-white text-[#FF6B6B] border-none rounded-full py-3.5 px-7 text-[15px] font-bold cursor-pointer shrink-0 flex items-center gap-2 hover:bg-gray-100 transition-colors" onClick={()=> router.push("/login")}>
+          <button
+            className="bg-white text-[#FF6B6B] border-none rounded-full py-3.5 px-7 text-[15px] font-bold cursor-pointer shrink-0 flex items-center gap-2 hover:bg-gray-100 transition-colors"
+            onClick={() => router.push("/login")}
+          >
             Start Adopting <FaArrowRight />
           </button>
         </div>
@@ -98,7 +101,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5 pt-6 text-[#555] text-[13px]">
           <p className="m-0">© 2025 Pawfect. All rights reserved.</p>
-          <p className="m-0">Made with 💖 by Shiva and Pankaj</p>
+          <p className="m-0">Made with 💖 by Shiva</p>
         </div>
       </div>
     </footer>
