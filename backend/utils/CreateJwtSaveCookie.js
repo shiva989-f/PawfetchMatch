@@ -10,7 +10,8 @@ export const createJwtSaveInCookies = (res, userId, userRole) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: "None", // Production env
+    // sameSite: "Lax", // Development env
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   return token;
