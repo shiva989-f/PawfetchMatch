@@ -117,7 +117,7 @@ const ChatArea = ({ chatId, activeContact }) => {
         </div>
       ) : (
         <>
-          {/* ── Chat Header ── */}
+          {/* Chat Header */}
           <header className="bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between shadow-sm shrink-0">
             <div className="flex items-center gap-3">
               <div
@@ -145,7 +145,7 @@ const ChatArea = ({ chatId, activeContact }) => {
             </div>
           </header>
 
-          {/* ── Messages ── */}
+          {/* Messages */}
           <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
             <div className="flex items-center justify-center">
               <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
